@@ -89,6 +89,7 @@ namespace EasyPeasyFirstPersonController
 
         private void Update()
         {
+            Debug.Log("Testing Character Controller" + characterController.velocity.magnitude);
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
             if (isGrounded && moveDirection.y < 0)
             {
