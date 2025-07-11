@@ -205,7 +205,21 @@ void HandlePatrol()
 
     IEnumerator WaitAndReturnToPatrol(float waitTime)
 {
+    Quaternion leftRotation = Quaternion.Euler(new Vector3 (0, transform.eulerAngles.y - 90f, 0));
+    Quaternion rightRotation = Quaternion.Euler(new Vector3 (0, transform.eulerAngles.y + 90f, 0));
+
+    float quarter = waitTime / 4;
+    float half = waitTime / 2;
+    float turnSpeed = 180f;
+
     isWaitingToReturn = true;
+
+        //turn left, turn right
+    
+    yield return new WaitForSeconds(quarter);
+
+    yield return new WaitForSeconds(quarter);
+
     yield return new WaitForSeconds(waitTime);
     isWaitingToReturn = false;
 
@@ -215,23 +229,30 @@ void HandlePatrol()
 
     void HandleChase()
     {
-
-        agent.SetDestination(playerObject.transform.position);
-        transform.LookAt(playerObject.transform);            
-
         // set movement speed up, trigger sound cues + music
 
         // if seesPlayer, get current player location and path to it.
 
         // if !seesPlayer, path towards last seen player location
         // start coroutine towards changing state to BoarState.PathingBack after chaseCooldown secs
-
+        Vector3 relativePosition = transform.position - playerObject.transform.position;
+        if (seesPlayer)
+        {
+            // need a sound trigger
+            agent.SetDestination(playerObject.transform.position);
+            transform.rotation = Quaternion.LookRotation(relativePosition, new Vector3 (0, 1, 0));
+        }
+        if (!seesPlayer)
+        {
+            currentState = BoarState.Investigating;
+        }
 
     }
 
     void HandlePathingBack()
     {
         // get to initial starting location
+
     }
 
     private void OnDrawGizmosSelected()
