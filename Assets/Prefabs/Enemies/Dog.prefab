@@ -101,6 +101,7 @@ MonoBehaviour:
   playerIsMoving: 0
   playerInHearingRange: 0
   movementHearingThreshold: 2
+  spawnLocation: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
   whatIsGround:
     serializedVersion: 2
@@ -108,13 +109,15 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 64
-  dogSpeed: 2
   runningMultiplier: 4
   reachThreshold: 1
   hearingRadius: 15
+  mourningPosition: 999
   secondsEntityCantHear: 2
-  positions: []
-  runningFinalLocation: {x: 0, y: 0, z: 0}
+  positions:
+  - {x: -5, y: 0, z: 5}
+  - {x: -5, y: 0, z: 55}
+  runningFinalLocation: {x: -25, y: 0, z: 75}
 --- !u!195 &7986975405166287325
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TeleporterScript : MonoBehaviour
@@ -8,6 +9,9 @@ public class TeleporterScript : MonoBehaviour
 
     public bool isTeleporter;
     public GameObject otherTeleporter;
+    public GameObject mobPrefab; 
+
+    public GameObject[] mobs;
     void Start()
     {
 
@@ -46,6 +50,30 @@ public class TeleporterScript : MonoBehaviour
             // Step 3: Offset the entire player so that truePosition ends up at the right spot
             Vector3 playerOffset = player.transform.position - truePos.position;
             player.transform.position = targetTruePosWorld + playerOffset;
+
+
+        foreach (GameObject mob in mobs)
+        {
+            DogLogic mobScript = mob.GetComponent<DogLogic>();
+            if (mobScript == null)
+            {
+                Debug.LogWarning("MobScript not found on " + mob.name);
+                continue;
+            }
+
+            // Optionally preserve rotation if needed
+            Quaternion mobRotation = mob.transform.rotation;
+
+            // Instantiate new mob at saved spawnLocation
+            GameObject newMob = Instantiate(mobPrefab, mobScript.spawnLocation, mobRotation);
+
+            // Replace in the array if needed
+            // mobs[i] = newMob;
+
+            // Destroy current mob
+            Destroy(mob);
+        }
+
         }
     }
 }

@@ -27,6 +27,8 @@ public class DogLogic : MonoBehaviour
 
     // Dog Variables
 
+    public Vector3 spawnLocation;
+
     public NavMeshAgent agent;
     public LayerMask whatIsGround;
     public LayerMask whatIsPlayer;
@@ -81,7 +83,7 @@ public class DogLogic : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         playerObject = GameObject.Find("FirstPersonController")
         .GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
-
+        spawnLocation = transform.position;
     }
 
     // Update is called once per frame
