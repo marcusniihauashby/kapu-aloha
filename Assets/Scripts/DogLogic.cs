@@ -160,7 +160,10 @@ public class DogLogic : MonoBehaviour
             if (indexMovingTowards >= positions.Length - 1)
             {
                 //TODO: Figure out where the dog is going when we finish.
-                gameObject.SetActive(false);
+                // iʻm thinking here of just making the dog teleport back to itʻs spawn location
+                gameObject.transform.position = spawnLocation;
+                indexMovingTowards = 0;
+
             }
 
             indexMovingTowards++;
@@ -184,9 +187,11 @@ public class DogLogic : MonoBehaviour
     {
         isRunning = true;
         Vector3 relativePos = playerObject.transform.position - transform.position;
-        transform.rotation = Quaternion.LookRotation(relativePos, new Vector3(0, 1, 0));
+        // transform.rotation = Quaternion.LookRotation(relativePos, new Vector3(0, 1, 0));
+        agent.SetDestination(playerObject.transform.position);
+        yield return new WaitForSeconds(0.1f);
         // make sound
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         // run away coroutine, including destroying object
         agent.speed *= runningMultiplier;
         agent.SetDestination(runningFinalLocation);
