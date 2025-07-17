@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5138528150048716307}
   - component: {fileID: 6936683640689356710}
   - component: {fileID: 6393217490122452805}
+  - component: {fileID: 4757323752204140741}
   m_Layer: 0
   m_Name: Boar
   m_TagString: Untagged
@@ -108,14 +109,20 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 64
+  lineOfSight: {fileID: 0}
   secondsEntityCantHear: 2
   boarSpeed: 2
   reachThreshold: 1
   hearingRadius: 10
   chaseCooldown: 2
+  requiredSightTime: 1.5
+  raycastHeightOffset: 1.5
+  sightObstructionMask:
+    serializedVersion: 2
+    m_Bits: 0
   positions: []
   timeBetweenAttacks: 0
-  lastHeardLocation: {x: 0, y: 0, z: 0}
+  lastRecognizedPlayerLocation: {x: 0, y: 0, z: 0}
 --- !u!195 &6393217490122452805
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -138,3 +145,26 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &4757323752204140741
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5882645272290941286}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 10
+  m_Height: 15
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 7.5}
