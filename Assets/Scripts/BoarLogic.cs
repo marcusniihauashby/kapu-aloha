@@ -22,6 +22,8 @@ public class BoarLogic : MonoBehaviour
     public bool playerInHearingRange = false;
     public float movementHearingThreshold = 2;
 
+    public bool playerIsHiding = false;
+
     // Boar Variables
 
     public NavMeshAgent agent;
@@ -41,7 +43,7 @@ public class BoarLogic : MonoBehaviour
 
 
     // HandleSight Variables
-    private bool playerInSightZone = false;
+    public bool playerInSightZone = false;
     private float playerVisibleTimer = 0f;
     public float requiredSightTime = 1.5f;
     public float raycastHeightOffset = 1.5f;
@@ -95,9 +97,13 @@ public class BoarLogic : MonoBehaviour
     void Update()
     {
         Debug.Log("Boar Update running. State: " + currentState);
-        Debug.Log("Patrol Boolean: " + isMovingForwards);
-        Debug.Log("IndexMovingTowards: " + indexMovingTowards + ", Positions.Length - 1: " + (positions.Length - 1));
+        // Debug.Log("IndexMovingTowards: " + indexMovingTowards + ", Positions.Length - 1: " + (positions.Length - 1));
 
+        // update playerIsHiding
+        playerIsHiding = playerObject.playerIsHiding;
+
+        HandleSight();
+        HandleHearing();
 
         switch (currentState)
         {
@@ -112,17 +118,13 @@ public class BoarLogic : MonoBehaviour
                 break;
         }
 
-        HandleSight();
-        HandleHearing();
     }
     // On the same GameObject with CapsuleCollider (Is Trigger checked)
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("something is in the collider");
         if (other.CompareTag("Player"))
         {
-            Debug.Log("it was the player!");
             playerInSightZone = true;
         }
     }
@@ -137,52 +139,53 @@ public class BoarLogic : MonoBehaviour
 
     void HandleSight()
     {
-        // if player within the lineOfSight trigger, then make a single raycast to the player's location.
+        /* 
+        If player is out of vision of the boar, then the boar ____.
+        Enters investigation on the last seen location?
+        
+        */
+        Debug.Log(playerVisibleTimer + "is playerVisibleTimer");
 
-        // if player is viewable from the raycast, go to investigating.
-        // additionally, we start a coroutine.
-        // if the player is consistently seen by a raycast to the player, then currentState = BoarState.Chasing.
-        // if not, do nothing.
-
-        // i need to make the chasing state take precedent over the investigating state.
-
-        if (!playerInSightZone)
+        if (!playerInSightZone || playerIsHiding)
         {
             seesPlayer = false;
-            playerVisibleTimer = 0f;
+            if (playerVisibleTimer >= 0f)
+            {
+                playerVisibleTimer -= Time.deltaTime;
+            }
             return;
         }
-
         Vector3 origin = transform.position + Vector3.up * raycastHeightOffset;
         Vector3 target = playerObject.transform.position + Vector3.up * raycastHeightOffset;
         Vector3 direction = (target - origin).normalized;
         float distance = Vector3.Distance(origin, target);
-
-        if (Physics.Raycast(origin, direction, out RaycastHit hit, distance, ~sightObstructionMask))
+        
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, distance, ~sightObstructionMask, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.CompareTag("Player"))
             {
                 seesPlayer = true;
-                playerVisibleTimer += Time.deltaTime;
-
-                if (playerVisibleTimer >= requiredSightTime && currentState != BoarState.Chasing)
+                if (playerVisibleTimer < requiredSightTime)
                 {
-                    currentState = BoarState.Chasing;
+                    playerVisibleTimer += Time.deltaTime;
                 }
-                else if (currentState != BoarState.Chasing && currentState != BoarState.Investigating)
+
+                if (playerVisibleTimer >= requiredSightTime)
                 {
                     lastRecognizedPlayerLocation = playerObject.transform.position;
-                    currentState = BoarState.Investigating;
+                    currentState = BoarState.Chasing;
                 }
+
+                // else if (currentState != BoarState.Chasing)
+                // {
+                //     currentState = BoarState.Investigating;
+                // }
 
                 return;
             }
         }
-
-        // Player is not visible
+        // if the raycast didn't rigger, the player is not visible
         seesPlayer = false;
-        playerVisibleTimer = 0f;
-
     }
 
     void HandleHearing()
@@ -233,7 +236,6 @@ public class BoarLogic : MonoBehaviour
             {
                 if (indexMovingTowards >= positions.Length - 1)
                 {
-                    Debug.Log("Switching direction! Moving backwards now.");
                     isMovingForwards = false;
                     indexMovingTowards--;
                 }
@@ -263,6 +265,7 @@ public class BoarLogic : MonoBehaviour
         agent.SetDestination(lastRecognizedPlayerLocation);
         if (Vector3.Distance(transform.position, lastRecognizedPlayerLocation) < reachThreshold)
         {
+            // if this triggers, we're at location and we look left and right. if we see someone, we break
             if (!isWaitingToReturn)
             {
                 StartCoroutine(WaitAndReturnToPatrol(2f));
@@ -290,7 +293,10 @@ public class BoarLogic : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         isWaitingToReturn = false;
 
-        currentState = BoarState.Patrolling;
+        if (currentState != BoarState.Chasing)
+        {
+            currentState = BoarState.Patrolling;
+        }
     }
 
 
@@ -302,16 +308,22 @@ public class BoarLogic : MonoBehaviour
 
         // if !seesPlayer, path towards last seen player location
         // start coroutine towards changing state to BoarState.PathingBack after chaseCooldown secs
-        Vector3 relativePosition = transform.position - playerObject.transform.position;
+        Vector3 relativePosition = playerObject.transform.position - transform.position;
         if (seesPlayer)
         {
             // need a sound trigger
             agent.SetDestination(playerObject.transform.position);
             transform.rotation = Quaternion.LookRotation(relativePosition, new Vector3(0, 1, 0));
         }
+
         if (!seesPlayer)
         {
-            currentState = BoarState.Investigating;
+            // de-aggro from sight over time
+            playerVisibleTimer -= Time.deltaTime;
+            if (playerVisibleTimer < 0f)
+            {
+                currentState = BoarState.Investigating;
+            }
         }
 
     }

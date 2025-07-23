@@ -6,6 +6,7 @@ namespace EasyPeasyFirstPersonController
 
     public partial class FirstPersonController : MonoBehaviour
     {
+        public bool playerIsHiding = false;
         [Range(0, 100)] public float mouseSensitivity = 25f;
         [Range(0f, 200f)] private float snappiness = 100f;
         [Range(0f, 20f)] public float walkSpeed = 10f;
