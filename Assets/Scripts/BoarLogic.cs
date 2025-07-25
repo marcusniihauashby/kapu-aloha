@@ -54,14 +54,14 @@ public class BoarLogic : MonoBehaviour
 
     // HandlePatrol Variables
     public Vector3[] positions;
-    private int indexMovingTowards = 0;
+    public int indexMovingTowards = 0;
     private bool isMovingForwards = true;
 
     // HandleChase Variables
     public float timeBetweenAttacks;
     bool alreadyAttacked;
 
-    //HandleSight Variables (add back later)
+    // i had these for a reason that I no longer remember (add back later)
     // public bool playerInHearingRange, playerInAttackRange;
 
     public Vector3 lastRecognizedPlayerLocation;
@@ -280,7 +280,6 @@ public class BoarLogic : MonoBehaviour
 
         float quarter = waitTime / 4;
         float half = waitTime / 2;
-        float turnSpeed = 180f;
 
         isWaitingToReturn = true;
 

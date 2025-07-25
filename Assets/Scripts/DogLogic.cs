@@ -23,7 +23,7 @@ public class DogLogic : MonoBehaviour
     public bool playerMadeNoise = false;
     public bool playerIsMoving = false;
     public bool playerInHearingRange = false;
-    public float movementHearingThreshold = 2;
+    public float movementHearingThreshold = 2f;
 
     // Dog Variables
 
@@ -36,7 +36,6 @@ public class DogLogic : MonoBehaviour
     public float runningMultiplier = 4f;
     public float reachThreshold = 1f;
     public float hearingRadius = 10f;
-
     public int mourningPosition = 999;
 
     private bool canHear = true;
