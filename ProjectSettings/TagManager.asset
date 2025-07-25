@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Boar
   - Baby Boar
+  - PlaceTrigger
   layers:
   - Default
   - TransparentFX
