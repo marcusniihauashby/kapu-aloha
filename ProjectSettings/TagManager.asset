@@ -4,6 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Boar
+  - Baby Boar
   - PlaceTrigger
   layers:
   - Default

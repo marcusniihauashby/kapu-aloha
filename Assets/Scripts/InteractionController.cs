@@ -39,8 +39,7 @@ public class CubePlacer : MonoBehaviour
         }
 
         if (!isHovering)
-        {
-            uiPrompt.SetActive(false);
+        {            uiPrompt.SetActive(false);
         }
     }
 }

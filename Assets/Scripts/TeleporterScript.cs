@@ -9,9 +9,10 @@ public class TeleporterScript : MonoBehaviour
 
     public bool isTeleporter;
     public GameObject otherTeleporter;
-    public GameObject mobPrefab; 
 
-    public GameObject[] mobs;
+    public GameObject[] itemsToTrack;
+
+    public GameObject babyBoarToReset;
     void Start()
     {
 
@@ -20,7 +21,16 @@ public class TeleporterScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        // if the items in itemsToTrack are all set to active, turn off isTeleporter.
+        // is this fine to check this if we're only having 3 items in itemsToTrack?
+        if (!isTeleporter) return;
+        foreach (GameObject item in itemsToTrack) {
+            if (!item.GetComponent<MeshRenderer>().enabled)
+            {
+                return;
+            }
+        }
+        isTeleporter = false;
     }
 
 
@@ -51,29 +61,33 @@ public class TeleporterScript : MonoBehaviour
             Vector3 playerOffset = player.transform.position - truePos.position;
             player.transform.position = targetTruePosWorld + playerOffset;
 
-
-        foreach (GameObject mob in mobs)
-        {
-            DogLogic mobScript = mob.GetComponent<DogLogic>();
-            if (mobScript == null)
+            if (babyBoarToReset != null)
             {
-                Debug.LogWarning("MobScript not found on " + mob.name);
-                continue;
+                BabyBoarLogic babyBoarLogic = babyBoarToReset.GetComponent<BabyBoarLogic>();
+                babyBoarLogic.indexMovingTowards = 0;
+                babyBoarToReset.SetActive(false);
             }
 
-            // Optionally preserve rotation if needed
-            Quaternion mobRotation = mob.transform.rotation;
-
-            // Instantiate new mob at saved spawnLocation
-            GameObject newMob = Instantiate(mobPrefab, mobScript.spawnLocation, mobRotation);
-
-            // Replace in the array if needed
-            // mobs[i] = newMob;
-
-            // Destroy current mob
-            Destroy(mob);
-        }
 
         }
+        else if (other.CompareTag("Boar"))
+        {
+            GameObject mob = other.gameObject;
+            Vector3 localOffset = transform.InverseTransformPoint(mob.transform.position);
+            Vector3 targetTruePosWorld = otherTeleporter.transform.TransformPoint(localOffset);
+            mob.transform.position = targetTruePosWorld;
+            // change the 
+            BoarLogic boarScript = mob.GetComponent<BoarLogic>();
+            boarScript.indexMovingTowards = 0;
+        }
+        // else if (other.CompareTag("Baby Boar"))
+        // {
+        //     GameObject mob = other.gameObject;
+        //     Vector3 localOffset = transform.InverseTransformPoint(mob.transform.position);
+        //     Vector3 targetTruePosWorld = otherTeleporter.transform.TransformPoint(localOffset);
+        //     mob.transform.position = targetTruePosWorld;
+        //     BabyBoarLogic babyBoarLogic = mob.GetComponent<BabyBoarLogic>();
+        //     babyBoarLogic.indexMovingTowards = 0;
+        // }
     }
 }
