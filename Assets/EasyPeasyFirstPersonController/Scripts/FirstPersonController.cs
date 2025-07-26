@@ -279,5 +279,11 @@ namespace EasyPeasyFirstPersonController
             Cursor.lockState = newVisibility ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = newVisibility;
         }
+        public void RotateInstantly(float angle)
+        {
+            rotX += angle;
+            xVelocity += angle;  // optional: skip lerping for immediate effect
+            transform.rotation = Quaternion.Euler(0f, xVelocity, 0f);
+        }
     }
 }

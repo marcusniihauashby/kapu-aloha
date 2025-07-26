@@ -25,12 +25,12 @@ public class TeleporterScript : MonoBehaviour
         // is this fine to check this if we're only having 3 items in itemsToTrack?
         if (!isTeleporter) return;
         foreach (GameObject item in itemsToTrack) {
-            if (!item.activeInHierarchy)
+            if (!item.GetComponent<MeshRenderer>().enabled)
             {
                 return;
             }
-            isTeleporter = false;
         }
+        isTeleporter = false;
     }
 
 
