@@ -96,7 +96,7 @@ public class BoarLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Boar Update running. State: " + currentState);
+        // Debug.Log("Boar Update running. State: " + currentState);
         // Debug.Log("IndexMovingTowards: " + indexMovingTowards + ", Positions.Length - 1: " + (positions.Length - 1));
 
         // update playerIsHiding
@@ -144,7 +144,7 @@ public class BoarLogic : MonoBehaviour
         Enters investigation on the last seen location?
         
         */
-        Debug.Log(playerVisibleTimer + "is playerVisibleTimer");
+        // Debug.Log(playerVisibleTimer + "is playerVisibleTimer");
 
         if (!playerInSightZone || playerIsHiding)
         {

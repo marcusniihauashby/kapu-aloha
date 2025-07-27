@@ -8,10 +8,16 @@ public class DialogueScript : MonoBehaviour, IDialogue
     [SerializeField] private DialogueText dialogueText;
     [SerializeField] private DialogueController dialogueController;
 
+    [SerializeField] private AudioClip audioClip;
+
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            if (audioClip != null)
+            {                
+                SoundFXManager.instance.PlaySoundFXClip(audioClip, transform.position, 1f);
+            }
             if (dialogueText.isConversation)
             {
                 Conversation(dialogueText);
