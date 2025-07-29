@@ -91,6 +91,7 @@ public class DialogueController : MonoBehaviour
     {
         DisplayNextParagraph(dialogueText);
         StartCoroutine(RunMonologue(dialogueText));
+        Debug.Log("exited the loop");
 
     }
 
