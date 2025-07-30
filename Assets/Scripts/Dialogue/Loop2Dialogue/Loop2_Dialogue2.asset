@@ -10,12 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6a24499ac4184dc79a002cdfe2c07a7, type: 3}
-  m_Name: EnterLoop2_Dialogue3
+  m_Name: Loop2_Dialogue2
   m_EditorClassIdentifier: 
   isConversation: 0
   speakerName:
   - You
   paragraphs:
-  - If I must return what I took like that old woman said, then I need to...return
-    their food!
-  - But, how am I going to get past them? They look so angry!
+  - What's that noise? Is that...a pig?
