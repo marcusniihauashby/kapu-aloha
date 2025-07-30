@@ -121,3 +121,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactRange: 3
+  isFinalItem: 0
+  audioClip: {fileID: 8300000, guid: 33df931a498ca4343b9fc8a02377845b, type: 3}
