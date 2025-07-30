@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: PeleOldWoman_Dialogue1
   m_EditorClassIdentifier: 
   isConversation: 0
-  speakerName: []
-  paragraphs: []
+  speakerName:
+  - Old Woman
+  - Old Woman
+  paragraphs:
+  - Hello there, child.
+  - Those items that you have taken from the forest...may I have them, please?

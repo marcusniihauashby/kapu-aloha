@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Object4Dialogue
   m_EditorClassIdentifier: 
   isConversation: 0
-  speakerName: []
-  paragraphs: []
+  speakerName:
+  - You
+  paragraphs:
+  - And another, wow! There's so much here...

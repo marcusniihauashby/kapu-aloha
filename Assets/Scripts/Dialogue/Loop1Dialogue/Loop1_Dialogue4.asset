@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Loop1_Dialogue4
   m_EditorClassIdentifier: 
   isConversation: 0
-  speakerName: []
-  paragraphs: []
+  speakerName:
+  - You
+  paragraphs:
+  - Wait, is that...water I hear?

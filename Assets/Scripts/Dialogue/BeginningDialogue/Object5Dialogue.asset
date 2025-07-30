@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Object5Dialogue
   m_EditorClassIdentifier: 
   isConversation: 0
-  speakerName: []
-  paragraphs: []
+  speakerName:
+  - You
+  paragraphs:
+  - Okay, this should be the last one for now...what abundance!
