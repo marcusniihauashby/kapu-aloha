@@ -11,6 +11,9 @@ public class ItemScript : MonoBehaviour
     private bool isActive = true;
     private MeshRenderer meshRenderer;
 
+    [SerializeField] private AudioClip audioClip;
+
+
     void Start()
     {
         playerObject = GameObject.Find("FirstPersonController")
@@ -26,6 +29,7 @@ public class ItemScript : MonoBehaviour
         {
             isActive = !isActive;
             meshRenderer.enabled = isActive;
+            SoundFXManager.instance.PlaySoundFXClip(audioClip, transform.position, 1f);
             if (isFinalItem)
             {
                 // teleport player to other location.
@@ -44,7 +48,7 @@ public class ItemScript : MonoBehaviour
 
                 var controller = playerObject.GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
                 controller.RotateInstantly(180f);
-                
+
                 playerObject.transform.position = teleportLocation + flippedOffset;
 
 
