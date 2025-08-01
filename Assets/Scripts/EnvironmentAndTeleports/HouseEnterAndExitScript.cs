@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HouseEnterAndExitScript : MonoBehaviour
@@ -12,7 +13,10 @@ public class HouseEnterAndExitScript : MonoBehaviour
     private Coroutine angleCheckCoroutine;
 
     public GameObject[] teleporters;
+
+    public GameObject[] triggers;
     private bool teleportersActivated;
+
 
 
 
@@ -41,6 +45,11 @@ public class HouseEnterAndExitScript : MonoBehaviour
                     teleporterScript.isTeleporter = true;
                 }
                 teleportersActivated = true;
+
+                foreach (GameObject trigger in triggers)
+                {
+                    trigger.SetActive(true);
+                }
             }
         }
     }
@@ -59,6 +68,7 @@ public class HouseEnterAndExitScript : MonoBehaviour
             // if player's y rotation is ever between 140 and 220, houseDuplicate.SetActive(false);
             if (other.CompareTag("Player"))
             {
+
                 if (angleCheckCoroutine == null)
                 {
                     angleCheckCoroutine = StartCoroutine(CheckPlayerRotationCoroutine());

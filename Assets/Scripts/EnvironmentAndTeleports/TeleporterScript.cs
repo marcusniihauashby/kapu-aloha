@@ -13,6 +13,7 @@ public class TeleporterScript : MonoBehaviour
     public GameObject[] itemsToTrack;
 
     public GameObject babyBoarToReset;
+    public GameObject boarToReset;
     void Start()
     {
 
@@ -65,7 +66,14 @@ public class TeleporterScript : MonoBehaviour
             {
                 BabyBoarLogic babyBoarLogic = babyBoarToReset.GetComponent<BabyBoarLogic>();
                 babyBoarLogic.indexMovingTowards = 0;
+                babyBoarToReset.transform.position = babyBoarLogic.spawnPosition;
                 babyBoarToReset.SetActive(false);
+            }
+            if (boarToReset != null)
+            {
+                BoarLogic boarLogic = boarToReset.GetComponent<BoarLogic>();
+                boarLogic.indexMovingTowards = 0;
+                boarToReset.transform.position = boarLogic.spawnPosition;
             }
 
 

@@ -15,7 +15,7 @@ public class DialogueScript : MonoBehaviour, IDialogue
         if (other.CompareTag("Player"))
         {
             if (audioClip != null)
-            {                
+            {
                 SoundFXManager.instance.PlaySoundFXClip(audioClip, transform.position, 1f);
             }
             if (dialogueText.isConversation)
@@ -26,6 +26,7 @@ public class DialogueScript : MonoBehaviour, IDialogue
             {
                 Monologue(dialogueText);
             }
+            Destroy(gameObject);
 
         }
     }

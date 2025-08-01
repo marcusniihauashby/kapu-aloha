@@ -16,7 +16,7 @@ public class BabyBoarLogic : MonoBehaviour
 
     // Baby Boar Variables
 
-    public Vector3 spawnLocation;
+    public Vector3 spawnPosition;
 
     public NavMeshAgent agent;
     public LayerMask whatIsGround;
@@ -67,7 +67,7 @@ public class BabyBoarLogic : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         playerObject = GameObject.Find("FirstPersonController")
         .GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
-        spawnLocation = transform.position;
+        spawnPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -223,7 +223,7 @@ public class BabyBoarLogic : MonoBehaviour
         // Check if we've reached the target
         if (Vector3.Distance(transform.position, target) < reachThreshold)
         {
-            if (indexMovingTowards == mourningPosition - 1)
+            if (indexMovingTowards == mourningPosition)
             {
                 currentState = BabyBoarState.Mourning;
             }
@@ -231,7 +231,7 @@ public class BabyBoarLogic : MonoBehaviour
             {
                 //TODO: Figure out where the dog is going when we finish.
                 // iʻm thinking here of just making the dog teleport back to itʻs spawn location
-                gameObject.transform.position = spawnLocation;
+                gameObject.transform.position = spawnPosition;
                 indexMovingTowards = 0;
 
             }
@@ -271,7 +271,7 @@ public class BabyBoarLogic : MonoBehaviour
         agent.speed /= runningMultiplier;
         gameObject.SetActive(false);
         isRunning = false;
-        gameObject.transform.position = spawnLocation;
+        gameObject.transform.position = spawnPosition;
 
     }
 

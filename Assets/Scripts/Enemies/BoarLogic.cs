@@ -31,6 +31,7 @@ public class BoarLogic : MonoBehaviour
     public LayerMask whatIsPlayer;
 
     public CapsuleCollider lineOfSight;
+    public Vector3 spawnPosition;
     private bool canHear = true;
     public bool seesPlayer = false;
     public float secondsEntityCantHear = 2f;
@@ -91,6 +92,7 @@ public class BoarLogic : MonoBehaviour
         playerObject = GameObject.Find("FirstPersonController")
         .GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
         lineOfSight = GetComponent<CapsuleCollider>();
+        spawnPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -236,8 +238,9 @@ public class BoarLogic : MonoBehaviour
             {
                 if (indexMovingTowards >= positions.Length - 1)
                 {
-                    isMovingForwards = false;
-                    indexMovingTowards--;
+                    indexMovingTowards = 0;
+                    // isMovingForwards = false;
+                    // indexMovingTowards--;
                 }
                 else
                 {
