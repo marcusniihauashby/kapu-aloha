@@ -15,6 +15,7 @@ MonoBehaviour:
   isConversation: 0
   speakerName:
   - You
+  - You
   paragraphs:
   - Oh wow, it is really coming down!
   - I better make this quick then.

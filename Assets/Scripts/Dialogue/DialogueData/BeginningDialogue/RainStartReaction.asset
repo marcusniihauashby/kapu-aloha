@@ -15,6 +15,7 @@ MonoBehaviour:
   isConversation: 0
   speakerName:
   - You
+  - You
   paragraphs:
   - Ah, as I said earlier, a storm must be coming in.
   - I believe I'm nearing the end of the valley, so I'll just check out the end and

@@ -15,6 +15,7 @@ MonoBehaviour:
   isConversation: 0
   speakerName:
   - You
+  - You
   paragraphs:
   - Jesus!
   - ...well, a storm must be coming in. Quite unexpected, though.

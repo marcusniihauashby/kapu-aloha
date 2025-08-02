@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class RainIncreasesScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject rainfall;
+    private ParticleSystem particleSystem;
+
+    // A variable to store the original rate
+    private float initialRate;
+
+    public void Start()
     {
-        
+        particleSystem = rainfall.GetComponent<ParticleSystem>();
+        // Store the starting emission rate
+        initialRate = particleSystem.emission.rateOverTime.constant;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnTriggerEnter(Collider other)
     {
-        
+        if (other.CompareTag("Player"))
+        {
+            var emission = particleSystem.emission;
+            // Set the rate to 1.5x the original rate
+            emission.rateOverTime = initialRate * 1.5f;
+            Destroy(gameObject);
+        }
     }
 }
+

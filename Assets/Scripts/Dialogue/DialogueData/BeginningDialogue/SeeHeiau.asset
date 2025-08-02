@@ -15,6 +15,7 @@ MonoBehaviour:
   isConversation: 0
   speakerName:
   - You
+  - You
   paragraphs:
   - What curious stonework lies at the valley's far end? Some manner of native temple,
     perhaps.
