@@ -8582,7 +8582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6907732464821268935}
   m_Layer: 0
-  m_Name: Loop 1
+  m_Name: Loop 1 (Unusable, but dont delete)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
