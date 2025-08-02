@@ -15,5 +15,7 @@ MonoBehaviour:
   isConversation: 0
   speakerName:
   - You
+  - You
   paragraphs:
-  - And another! I wonder what they're here for...
+  - Is that another? I wonder what they're here for...
+  - I'm certain Dr. Whitmore will be pleased with this specimen of island handiwork.
