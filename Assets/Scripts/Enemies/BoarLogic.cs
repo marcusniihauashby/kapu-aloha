@@ -10,6 +10,7 @@ using Unity.VisualScripting.ReorderableList;
 using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class BoarLogic : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class BoarLogic : MonoBehaviour
     public LayerMask whatIsGround;
     public LayerMask whatIsPlayer;
 
-    public CapsuleCollider lineOfSight;
+
     public Vector3 spawnPosition;
     private bool canHear = true;
     public bool seesPlayer = false;
@@ -40,10 +41,12 @@ public class BoarLogic : MonoBehaviour
     public float hearingRadius = 10f;
     public float chaseCooldown = 2f;
 
+
     private bool isWaitingToReturn = false;
 
 
     // HandleSight Variables
+    public CapsuleCollider lineOfSight;
     public bool playerInSightZone = false;
     private float playerVisibleTimer = 0f;
     public float requiredSightTime = 1.5f;
@@ -59,8 +62,12 @@ public class BoarLogic : MonoBehaviour
     private bool isMovingForwards = true;
 
     // HandleChase Variables
-    public float timeBetweenAttacks;
-    bool alreadyAttacked;
+    public BoxCollider attackHitboxObject;
+    private bool soundPlayed;
+    private bool attackCoroutineStarted = false;
+    private float attackHitboxSpawnDelay = 1.5f;
+
+
 
     // i had these for a reason that I no longer remember (add back later)
     // public bool playerInHearingRange, playerInAttackRange;
@@ -93,6 +100,9 @@ public class BoarLogic : MonoBehaviour
         .GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
         lineOfSight = GetComponent<CapsuleCollider>();
         spawnPosition = transform.position;
+        attackHitboxObject = GameObject.Find("AttackHitbox")
+        .GetComponent<BoxCollider>();
+
     }
 
     // Update is called once per frame
@@ -161,11 +171,15 @@ public class BoarLogic : MonoBehaviour
         Vector3 target = playerObject.transform.position + Vector3.up * raycastHeightOffset;
         Vector3 direction = (target - origin).normalized;
         float distance = Vector3.Distance(origin, target);
-        
+
         if (Physics.Raycast(origin, direction, out RaycastHit hit, distance, ~sightObstructionMask, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.CompareTag("Player"))
             {
+                if (seesPlayer == false)
+                {
+                    // TODO: implement seen by boar sound
+                }
                 seesPlayer = true;
                 if (playerVisibleTimer < requiredSightTime)
                 {
@@ -265,6 +279,7 @@ public class BoarLogic : MonoBehaviour
     void HandleInvestigate()
     {
         // path towards lastRecognizedPlayerLocation, look left and right
+        // TODO: Investigate sound trigger
         agent.SetDestination(lastRecognizedPlayerLocation);
         if (Vector3.Distance(transform.position, lastRecognizedPlayerLocation) < reachThreshold)
         {
@@ -305,6 +320,10 @@ public class BoarLogic : MonoBehaviour
     void HandleChase()
     {
         // set movement speed up, trigger sound cues + music
+        soundPlayed = true;
+        // TODO: Play chase sound from boar
+        // start coroutine that takes one second to activate attackHitbox
+
 
         // if seesPlayer, get current player location and path to it.
 
@@ -316,6 +335,11 @@ public class BoarLogic : MonoBehaviour
             // need a sound trigger
             agent.SetDestination(playerObject.transform.position);
             transform.rotation = Quaternion.LookRotation(relativePosition, new Vector3(0, 1, 0));
+            if (!attackCoroutineStarted)
+            {
+                StartCoroutine(ActivateAttackHitboxAfterDelay(attackHitboxSpawnDelay));
+                attackCoroutineStarted = true;
+            }
         }
 
         if (!seesPlayer)
@@ -324,10 +348,19 @@ public class BoarLogic : MonoBehaviour
             playerVisibleTimer -= Time.deltaTime;
             if (playerVisibleTimer < 0f)
             {
+                attackHitboxObject.enabled = false;
                 currentState = BoarState.Investigating;
+                soundPlayed = false;
+                attackCoroutineStarted = false;
             }
         }
 
+    }
+
+    IEnumerator ActivateAttackHitboxAfterDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        attackHitboxObject.enabled = true;
     }
 
     private void OnDrawGizmosSelected()
