@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: DiscoverStealthArea
   m_EditorClassIdentifier: 
   isConversation: 0
-  speakerName: []
+  speakerName:
+  - You
+  - You
   paragraphs:
   - Remarkable! The fauna grows in such peculiar, windy formations. Quite unlike
     our meticulous english gardens.
