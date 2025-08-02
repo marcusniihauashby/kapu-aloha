@@ -1,5 +1,80 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &630881539361377638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 182757267125695315}
+  - component: {fileID: 3664752772043892815}
+  - component: {fileID: 287256304032913894}
+  m_Layer: 0
+  m_Name: AttackHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &182757267125695315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630881539361377638}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4223450587380709920}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3664752772043892815
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630881539361377638}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.4}
+  m_Center: {x: 0, y: 0, z: 0.7}
+--- !u!114 &287256304032913894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630881539361377638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c50983ea240b4682b88f9ec0d1a75e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathSound: {fileID: 8300000, guid: 578a0c9c28c324d59a4e74909f389072, type: 3}
+  lightningSound: {fileID: 8300000, guid: 72321e4b305b24210ac32513c550a100, type: 3}
+  playerObject: {fileID: 0}
+  respawnPoint: {x: 0, y: 0, z: 0}
+  respawnRotation: {x: 0, y: 0, z: 0}
+  blackOverlay: {fileID: 0}
+  dialogueText: {fileID: 11400000, guid: 91f5d808f3e1843f8bedbb93393c6bb9, type: 2}
+  dialogueController: {fileID: 0}
+  ambienceManager: {fileID: 0}
 --- !u!1 &2261711637473344829
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,6 +193,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2507276178365173927}
+  - {fileID: 182757267125695315}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &8683054431192960287
@@ -194,13 +270,14 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 64
-  lineOfSight: {fileID: 0}
+  spawnPosition: {x: 0, y: 0, z: 0}
   seesPlayer: 0
   secondsEntityCantHear: 2
   boarSpeed: 2
   reachThreshold: 2
-  hearingRadius: 10
+  hearingRadius: 15
   chaseCooldown: 2
+  lineOfSight: {fileID: 0}
   playerInSightZone: 0
   requiredSightTime: 1.5
   raycastHeightOffset: 1.5
@@ -209,7 +286,7 @@ MonoBehaviour:
     m_Bits: 8
   positions: []
   indexMovingTowards: 0
-  timeBetweenAttacks: 0
+  attackHitboxObject: {fileID: 3664752772043892815}
   lastRecognizedPlayerLocation: {x: 0, y: 0, z: 0}
 --- !u!195 &6393217490122452805
 NavMeshAgent:
@@ -252,7 +329,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3
-  m_Height: 3
+  m_Radius: 5
+  m_Height: 6
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 2}
+  m_Center: {x: 0, y: 0, z: 3}
