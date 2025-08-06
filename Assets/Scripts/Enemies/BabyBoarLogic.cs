@@ -170,12 +170,12 @@ public class BabyBoarLogic : MonoBehaviour
         }
         // if the raycast didn't trigger, the player is not visible
         seesPlayer = false;
-        playedInvestigateSound = false;
     }
 
 
     IEnumerator InvestigateSoundCooldown(float seconds)
     {
+        playedInvestigateSound = true;
         yield return new WaitForSeconds(seconds);
         playedInvestigateSound = false;
     }
@@ -208,13 +208,6 @@ public class BabyBoarLogic : MonoBehaviour
 
         float timer = 0f;
         float duration = 2f;
-
-        if (!playedInvestigateSound)
-        {
-            playedInvestigateSound = true;
-            SoundFXManager.instance.PlaySoundFXClip(boarHearsYou, transform.position, SOUND_EFFECT_VOLUME);
-            StartCoroutine(InvestigateSoundCooldown(INVESTIGATE_SOUND_COOLDOWN));
-        }
         while (timer < duration)
         {
             timer += Time.deltaTime;
@@ -229,7 +222,6 @@ public class BabyBoarLogic : MonoBehaviour
 
             yield return null;
         }
-        playedInvestigateSound = false;
         agent.isStopped = false;
         isInvestigating = false;
     }

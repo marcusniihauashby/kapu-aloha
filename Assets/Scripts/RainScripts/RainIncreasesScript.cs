@@ -13,7 +13,9 @@ public class RainIncreasesScript : MonoBehaviour
 
     public float amountToChange = 0.1f;
 
-    public float timeToFinishChangingAudio = 5f;
+    public float timeToFinishChangingAudio = .5f;
+
+    public float rainMultiplier = 2f;
 
     // A variable to store the original rate
     private float initialRate;
@@ -31,10 +33,9 @@ public class RainIncreasesScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             var emission = particleSystem.emission;
-            // Set the rate to 1.5x the original rate
-            emission.rateOverTime = initialRate * 2f;
-            Destroy(gameObject);
+            emission.rateOverTime = initialRate * rainMultiplier;
             StartCoroutine(ChangeVolume(amountToChange, timeToFinishChangingAudio));
+            gameObject.GetComponent<BoxCollider>().enabled = false;
         }
     }
 

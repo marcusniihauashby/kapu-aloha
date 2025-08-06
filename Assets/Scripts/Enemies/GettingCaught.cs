@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,6 +14,7 @@ public class GettingCaught : MonoBehaviour
     public EasyPeasyFirstPersonController.FirstPersonController playerObject;
     [SerializeField] private Vector3 respawnPoint;
     [SerializeField] private Vector3 respawnRotation;
+    [SerializeField] private Vector3 boarRespawnPoint;
     private bool isCaught = false;
 
     [SerializeField] private GameObject blackOverlay;
@@ -20,11 +22,12 @@ public class GettingCaught : MonoBehaviour
     [SerializeField] private DialogueText dialogueText;
     [SerializeField] private DialogueController dialogueController;
 
-    [SerializeField] private GameObject ambienceManager;
+    [SerializeField] private GameObject[] ambienceManagers;
+    
 
     void Start()
     {
-        GameObject.Find("FirstPersonController")
+        playerObject = GameObject.Find("FirstPersonController")
         .GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
     }
 
@@ -33,6 +36,7 @@ public class GettingCaught : MonoBehaviour
         if (!isCaught && other.CompareTag("Player"))
         {
             isCaught = true;
+            // move boar (parent of this object) back to it's initial spawn location
             StartCoroutine(HandleCaught());
         }
     }
@@ -48,9 +52,15 @@ public class GettingCaught : MonoBehaviour
         blackOverlay.SetActive(true);
 
         // turn off ambient sound
-        AudioSource source = ambienceManager.GetComponent<AudioSource>();
-        float originalVolume = source.volume;
-        source.volume = 0f;
+        float[] savedVolumes = new float[ambienceManagers.Length];
+
+        for (int i = 0; i < ambienceManagers.Length; i++)
+        {
+            GameObject ambienceManager = ambienceManagers[i];
+            AudioSource source = ambienceManager.GetComponent<AudioSource>();
+            savedVolumes[i] = source.volume;
+            source.volume = 0f;
+        }
 
 
         // disable player movement
@@ -61,24 +71,17 @@ public class GettingCaught : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         // Play attack sound effect
         SoundFXManager.instance.PlaySoundFXClip(deathSound, playerObject.transform.position, 1f);
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(4f);
 
         // play dialogue
         dialogueController.HandleMonologue(dialogueText);
 
-
-
         // Thanks gemini
-        Time.timeScale = 1;
         yield return new WaitUntil(() => !dialogueController.gameObject.activeInHierarchy);
 
         // Move player back to checkpoint
         playerObject.transform.position = respawnPoint;
 
-        UnityEngine.Debug.Log("Waiting 1 seconds...");
-        // for some reason this breaks everything, and it never gets to finished waiting. when i remove it it's completely fine.
-        yield return new WaitForSeconds(1f);
-        UnityEngine.Debug.Log("Finished waiting!");
 
         //play lightning sound effect
         SoundFXManager.instance.PlaySoundFXClip(lightningSound, playerObject.transform.position, 1f);
@@ -94,8 +97,12 @@ public class GettingCaught : MonoBehaviour
         playerObject.sprintSpeed = originalSprintSpeed;
 
         // turn ambient sound back on
-        source.volume = originalVolume;
-
+        for (int i = 0; i < ambienceManagers.Length; i++)
+        {
+            GameObject ambienceManager = ambienceManagers[i];
+            AudioSource source = ambienceManager.GetComponent<AudioSource>();
+            source.volume = savedVolumes[i];
+        }
     }
 }
 
