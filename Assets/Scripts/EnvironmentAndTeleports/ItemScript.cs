@@ -7,6 +7,8 @@ public class ItemScript : MonoBehaviour
     private EasyPeasyFirstPersonController.FirstPersonController playerObject;
     public float interactRange = 3f;
 
+    public float maxCheckRange = 7f;
+
     public bool isFinalItem = false;
     private bool isActive = true;
     private MeshRenderer meshRenderer;
@@ -33,14 +35,17 @@ public class ItemScript : MonoBehaviour
         float dist = Vector3.Distance(transform.position, playerObject.transform.position);
         if (dist < interactRange)
         {
+            Debug.Log("made it inside interact range");
             // display canvas saying press e to pick up/press e to put down
             if (meshRenderer.enabled)
             {
+                Debug.Log("turn on pickup text");
                 putDownText.SetActive(false);
                 pickUpText.SetActive(true);
             }
             else if (!meshRenderer.enabled)
             {
+                Debug.Log("turn on pickup text");
                 pickUpText.SetActive(false);
                 putDownText.SetActive(true);
 
@@ -76,7 +81,7 @@ public class ItemScript : MonoBehaviour
                 }
             }
         }
-        else if (dist > interactRange)
+        else if (dist > interactRange && dist < maxCheckRange)
         {
             putDownText.SetActive(false);
             pickUpText.SetActive(false);

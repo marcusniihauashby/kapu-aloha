@@ -70,6 +70,10 @@ namespace EasyPeasyFirstPersonController
 
         public float CurrentCameraHeight => isCrouching || isSliding ? crouchCameraHeight : originalCameraParentHeight;
 
+        private AudioSource[] audioSources;
+        public const float WALKING_SOUND_VOLUME = 0.02f;
+        public const float SPRINTING_SOUND_VOLUME = 0.01f;
+        public float movementThreshold;
         private void Awake()
         {
             characterController = GetComponent<CharacterController>();
@@ -86,10 +90,21 @@ namespace EasyPeasyFirstPersonController
             currentFov = normalFov;
             currentSlideSpeed = 0f;
             currentTiltAngle = 0f;
+            audioSources = GetComponents<AudioSource>();
         }
 
         private void Update()
         {
+            if (!isSprinting)
+            {
+                audioSources[0].volume = (characterController.velocity.magnitude > movementThreshold) ? WALKING_SOUND_VOLUME : 0f;
+                audioSources[1].volume = 0f;
+            }
+            else if (isSprinting)
+            {
+                audioSources[1].volume = (characterController.velocity.magnitude > movementThreshold) ? SPRINTING_SOUND_VOLUME : 0f;
+                audioSources[0].volume = 0f;
+            }
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
             if (isGrounded && moveDirection.y < 0)
             {

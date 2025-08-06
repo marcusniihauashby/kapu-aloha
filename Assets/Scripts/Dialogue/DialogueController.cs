@@ -9,6 +9,8 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueTextUI;
     [SerializeField] private float typeSpeed = 20f;
 
+    [SerializeField] private EasyPeasyFirstPersonController.FirstPersonController playerObject;
+
     private Queue<Tuple<String, String>> paragraphs = new Queue<Tuple<string, string>>();
 
     private bool conversationEnded;
@@ -86,8 +88,14 @@ public class DialogueController : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-
-    public void HandleMonologue(DialogueText dialogueText)
+    public void HandleConversation(DialogueText dialogueText)
+    {
+        // stop player movement until this is over
+        DisplayNextParagraph(dialogueText);
+        
+        
+    }
+        public void HandleMonologue(DialogueText dialogueText)
     {
         DisplayNextParagraph(dialogueText);
         StartCoroutine(RunMonologue(dialogueText));
@@ -114,10 +122,7 @@ public class DialogueController : MonoBehaviour
         DisplayNextParagraph(dialogueText);
     }
 
-    public void HandleConversation(DialogueText dialogueText)
-    {
-        // stop player movement until this is over
-    }
+    
 
     private IEnumerator TypeDialogueText(string p)
     {

@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isConversation: 0
   speakerName:
-  - Old Woman
-  - Old Woman
+  - ???
+  - You
+  - ???
   paragraphs:
-  - Hello there, child.
-  - Those items that you have taken from the forest...may I have them, please?
+  - Stop!
+  - Who are you?
+  - Im yo mama

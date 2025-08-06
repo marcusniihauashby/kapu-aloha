@@ -17,6 +17,11 @@ public class HouseEnterAndExitScript : MonoBehaviour
     public GameObject[] triggers;
     private bool teleportersActivated;
 
+    [SerializeField] private GameObject loopTwoDialogueTriggersContainer;
+
+    [SerializeField] private DialogueController dialogueController;
+    [SerializeField] private DialogueText dialogueText;
+
 
 
 
@@ -28,15 +33,11 @@ public class HouseEnterAndExitScript : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     void OnTriggerEnter(Collider other)
     {
         if (isDuplicateHouse && other.CompareTag("Player"))
         {
+            loopTwoDialogueTriggersContainer.SetActive(true);
             if (!teleportersActivated)
             {
                 foreach (GameObject teleporter in teleporters)
@@ -68,7 +69,6 @@ public class HouseEnterAndExitScript : MonoBehaviour
             // if player's y rotation is ever between 140 and 220, houseDuplicate.SetActive(false);
             if (other.CompareTag("Player"))
             {
-
                 if (angleCheckCoroutine == null)
                 {
                     angleCheckCoroutine = StartCoroutine(CheckPlayerRotationCoroutine());

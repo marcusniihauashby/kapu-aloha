@@ -20,7 +20,6 @@ public class SoundFXManager : MonoBehaviour
     {
         //spawn in GameObject
         AudioSource audioSource = Instantiate(soundFXObject, spawnTransform, Quaternion.identity);
-        Debug.Log("instantiating sound at " + spawnTransform);
         //assign the AudioClip
         audioSource.clip = audioClip;
 
@@ -29,7 +28,6 @@ public class SoundFXManager : MonoBehaviour
 
         //play sound
         audioSource.Play();
-        Debug.Log("playing sound at " + spawnTransform);
 
 
         //get length of sound FX clip
@@ -37,7 +35,6 @@ public class SoundFXManager : MonoBehaviour
 
         //destroy GameObject when the sound FX clip is done.
         Destroy(audioSource.gameObject, clipLength);
-        Debug.Log("destroying sound object");
     }
 
 
