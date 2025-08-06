@@ -21,7 +21,7 @@ public class BoarLogic : MonoBehaviour
     public bool playerMadeNoise = false;
     public bool playerIsMoving = false;
     public bool playerInHearingRange = false;
-    public float movementHearingThreshold = 2;
+    public float movementThreshold = 2;
 
     public bool playerIsHiding = false;
 
@@ -82,6 +82,12 @@ public class BoarLogic : MonoBehaviour
     }
 
     private BoarState currentState = BoarState.Patrolling;
+    public const float BOAR_WALK_VOLUME = 0.25f;
+    public const float SOUND_EFFECT_VOLUME = 0.5f;
+    private AudioSource boarWalk;
+    [SerializeField] private AudioClip boarNoticesYou;
+    [SerializeField] private AudioClip boarChaseStart;
+    private bool playedNoticedPlayerSound = false;
 
     /*
 
@@ -103,6 +109,7 @@ public class BoarLogic : MonoBehaviour
         attackHitboxObject = GameObject.Find("AttackHitbox")
         .GetComponent<BoxCollider>();
 
+
     }
 
     // Update is called once per frame
@@ -113,10 +120,9 @@ public class BoarLogic : MonoBehaviour
 
         // update playerIsHiding
         playerIsHiding = playerObject.playerIsHiding;
-
+        boarWalk.volume = (agent.velocity.magnitude > movementThreshold) ? BOAR_WALK_VOLUME : 0f;
         HandleSight();
         HandleHearing();
-
         switch (currentState)
         {
             case BoarState.Patrolling:
@@ -151,12 +157,6 @@ public class BoarLogic : MonoBehaviour
 
     void HandleSight()
     {
-        /* 
-        If player is out of vision of the boar, then the boar ____.
-        Enters investigation on the last seen location?
-        
-        */
-        // Debug.Log(playerVisibleTimer + "is playerVisibleTimer");
 
         if (!playerInSightZone || playerIsHiding)
         {
@@ -180,6 +180,11 @@ public class BoarLogic : MonoBehaviour
                 {
                     // TODO: implement seen by boar sound
                 }
+                if (!playedNoticedPlayerSound)
+                {
+                    playedNoticedPlayerSound = true;
+                    SoundFXManager.instance.PlaySoundFXClip(boarNoticesYou, transform.position, SOUND_EFFECT_VOLUME);
+                }
                 seesPlayer = true;
                 if (playerVisibleTimer < requiredSightTime)
                 {
@@ -200,8 +205,9 @@ public class BoarLogic : MonoBehaviour
                 return;
             }
         }
-        // if the raycast didn't rigger, the player is not visible
+        // if the raycast didn't trigger, the player is not visible
         seesPlayer = false;
+        playedNoticedPlayerSound = false;
     }
 
     void HandleHearing()
@@ -216,7 +222,7 @@ public class BoarLogic : MonoBehaviour
 
         CharacterController controller = playerObject.GetComponent<CharacterController>();
 
-        playerIsMoving = controller.velocity.magnitude > movementHearingThreshold;
+        playerIsMoving = controller.velocity.magnitude > movementThreshold;
 
         playerMadeNoise = !playerObject.isCrouching && playerIsMoving;
 
@@ -293,6 +299,11 @@ public class BoarLogic : MonoBehaviour
 
     IEnumerator WaitAndReturnToPatrol(float waitTime)
     {
+        if (!playedNoticedPlayerSound)
+        {
+            playedNoticedPlayerSound = true;
+            SoundFXManager.instance.PlaySoundFXClip(boarNoticesYou, transform.position, SOUND_EFFECT_VOLUME);
+        }
         Quaternion leftRotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y - 90f, 0));
         Quaternion rightRotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y + 90f, 0));
 
@@ -312,6 +323,7 @@ public class BoarLogic : MonoBehaviour
 
         if (currentState != BoarState.Chasing)
         {
+            playedNoticedPlayerSound = false;
             currentState = BoarState.Patrolling;
         }
     }
@@ -320,15 +332,11 @@ public class BoarLogic : MonoBehaviour
     void HandleChase()
     {
         // set movement speed up, trigger sound cues + music
-        soundPlayed = true;
-        // TODO: Play chase sound from boar
-        // start coroutine that takes one second to activate attackHitbox
-
-
-        // if seesPlayer, get current player location and path to it.
-
-        // if !seesPlayer, path towards last seen player location
-        // start coroutine towards changing state to BoarState.PathingBack after chaseCooldown secs
+        if (!soundPlayed)
+        {
+            soundPlayed = true;
+            SoundFXManager.instance.PlaySoundFXClip(boarChaseStart, transform.position, SOUND_EFFECT_VOLUME);
+        }
         Vector3 relativePosition = playerObject.transform.position - transform.position;
         if (seesPlayer)
         {

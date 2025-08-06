@@ -78,24 +78,24 @@ public class TeleporterScript : MonoBehaviour
 
 
         }
-        else if (other.CompareTag("Boar"))
-        {
-            GameObject mob = other.gameObject;
-            Vector3 localOffset = transform.InverseTransformPoint(mob.transform.position);
-            Vector3 targetTruePosWorld = otherTeleporter.transform.TransformPoint(localOffset);
-            mob.transform.position = targetTruePosWorld;
-            // change the 
-            BoarLogic boarScript = mob.GetComponent<BoarLogic>();
-            boarScript.indexMovingTowards = 0;
-        }
-        // else if (other.CompareTag("Baby Boar"))
-        // {
-        //     GameObject mob = other.gameObject;
-        //     Vector3 localOffset = transform.InverseTransformPoint(mob.transform.position);
-        //     Vector3 targetTruePosWorld = otherTeleporter.transform.TransformPoint(localOffset);
-        //     mob.transform.position = targetTruePosWorld;
-        //     BabyBoarLogic babyBoarLogic = mob.GetComponent<BabyBoarLogic>();
-        //     babyBoarLogic.indexMovingTowards = 0;
-        // }
+    //     else if (other.CompareTag("Boar"))
+    //     {
+    //         GameObject mob = other.gameObject;
+    //         Vector3 localOffset = transform.InverseTransformPoint(mob.transform.position);
+    //         Vector3 targetTruePosWorld = otherTeleporter.transform.TransformPoint(localOffset);
+    //         mob.transform.position = targetTruePosWorld;
+    //         // change the 
+    //         BoarLogic boarScript = mob.GetComponent<BoarLogic>();
+    //         boarScript.indexMovingTowards = 0;
+    //     }
+    //     else if (other.CompareTag("Baby Boar"))
+    //     {
+    //         GameObject mob = other.gameObject;
+    //         Vector3 localOffset = transform.InverseTransformPoint(mob.transform.position);
+    //         Vector3 targetTruePosWorld = otherTeleporter.transform.TransformPoint(localOffset);
+    //         mob.transform.position = targetTruePosWorld;
+    //         BabyBoarLogic babyBoarLogic = mob.GetComponent<BabyBoarLogic>();
+    //         babyBoarLogic.indexMovingTowards = 0;
+    //     }
     }
 }

@@ -10,6 +10,9 @@ public class ItemScript : MonoBehaviour
     public bool isFinalItem = false;
     private bool isActive = true;
     private MeshRenderer meshRenderer;
+    [SerializeField] private GameObject pickUpText;
+    [SerializeField] private GameObject putDownText;
+
 
     [SerializeField] private AudioClip audioClip;
 
@@ -22,39 +25,61 @@ public class ItemScript : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
+    // if we're close, we look at the meshrenderer. if meshrenderer active, we display pick up
+    // if meshrenderer not active, we display 
+
     void Update()
     {
         float dist = Vector3.Distance(transform.position, playerObject.transform.position);
-        if (dist < interactRange && Input.GetKeyDown(KeyCode.E))
+        if (dist < interactRange)
         {
-            isActive = !isActive;
-            meshRenderer.enabled = isActive;
-            SoundFXManager.instance.PlaySoundFXClip(audioClip, transform.position, 1f);
-            if (isFinalItem)
+            // display canvas saying press e to pick up/press e to put down
+            if (meshRenderer.enabled)
             {
-                // teleport player to other location.
-                /* 
-                Get a vector displaying the distance from player to item.
-                
-                Flip player's y by 180. AND flip the vector 180 degrees
-                Teleport player to item location + new flipped vector.
-                */
-                Vector3 offset = playerObject.transform.position - transform.position;
-                Vector3 flippedOffset = Quaternion.Euler(0, 180, 0) * offset;
-
-                Vector3 teleportLocation = GameObject.Find("Reference for Teleportation").transform.position;
-
-                Vector3 newRotation = playerObject.transform.eulerAngles;
-
-                var controller = playerObject.GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
-                controller.RotateInstantly(180f);
-
-                playerObject.transform.position = teleportLocation + flippedOffset;
-
-
-
+                putDownText.SetActive(false);
+                pickUpText.SetActive(true);
+            }
+            else if (!meshRenderer.enabled)
+            {
+                pickUpText.SetActive(false);
+                putDownText.SetActive(true);
 
             }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                isActive = !isActive;
+                meshRenderer.enabled = isActive;
+                SoundFXManager.instance.PlaySoundFXClip(audioClip, transform.position, 1f);
+                if (isFinalItem)
+                {
+                    // teleport player to other location.
+                    /* 
+                    Get a vector displaying the distance from player to item.
+
+                    Flip player's y by 180. AND flip the vector 180 degrees
+                    Teleport player to item location + new flipped vector.
+                    */
+                    Vector3 offset = playerObject.transform.position - transform.position;
+                    Vector3 flippedOffset = Quaternion.Euler(0, 180, 0) * offset;
+
+                    Vector3 teleportLocation = GameObject.Find("Reference for Teleportation").transform.position;
+
+                    Vector3 newRotation = playerObject.transform.eulerAngles;
+
+                    var controller = playerObject.GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
+                    controller.RotateInstantly(180f);
+
+                    playerObject.transform.position = teleportLocation + flippedOffset;
+
+
+
+                }
+            }
+        }
+        else if (dist > interactRange)
+        {
+            putDownText.SetActive(false);
+            pickUpText.SetActive(false);
         }
     }
 }

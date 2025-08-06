@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class BabyBoarLogic : MonoBehaviour
 {
@@ -11,7 +13,7 @@ public class BabyBoarLogic : MonoBehaviour
     public bool playerMadeNoise = false;
     public bool playerIsMoving = false;
     public bool playerInHearingRange = false;
-    public float movementHearingThreshold = 2f;
+    public float movementThreshold = 2f;
     public bool playerIsHiding = false;
 
     // Baby Boar Variables
@@ -23,9 +25,6 @@ public class BabyBoarLogic : MonoBehaviour
     public LayerMask whatIsPlayer;
 
     public CapsuleCollider lineOfSight;
-
-    // Don't think we're adding lightning to the game, at least not as a mechanic.
-    //private bool canHear = true;
     public bool seesPlayer = false;
     public float secondsEntityCantHear = 2f; // unused
     public float boarSpeed = 2f;
@@ -41,6 +40,8 @@ public class BabyBoarLogic : MonoBehaviour
     public float requiredSightTime = 1.5f;
     public float raycastHeightOffset = 1.5f;
     public LayerMask sightObstructionMask; // Assign this in Inspector (should include "Obstacles" but exclude "Player")
+
+    private bool playedInvestigateSound = false;
 
     // HandlePatrol Variables
     public Vector3[] positions;
@@ -61,6 +62,15 @@ public class BabyBoarLogic : MonoBehaviour
     }
 
     private BabyBoarState currentState = BabyBoarState.Patrolling;
+    public const float BOAR_WALK_VOLUME = 0.25f;
+
+    public const float SOUND_EFFECT_VOLUME = 0.5f;
+
+    public const float INVESTIGATE_SOUND_COOLDOWN = 5f;
+    private AudioSource boarWalk;
+    [SerializeField] private AudioClip boarHearsYou;
+    [SerializeField] private AudioClip boarRunsAway;
+    [SerializeField] private AudioClip boarMourns;
     // Start is called before the first frame update
     void Start()
     {
@@ -68,17 +78,19 @@ public class BabyBoarLogic : MonoBehaviour
         playerObject = GameObject.Find("FirstPersonController")
         .GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
         spawnPosition = transform.position;
+        boarWalk = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log(agent.velocity.magnitude);
         if (!gameObject.activeInHierarchy)
         {
             return;
         }
         playerIsHiding = playerObject.playerIsHiding;
+        boarWalk.volume = (agent.velocity.magnitude > movementThreshold) ? BOAR_WALK_VOLUME : 0f;
         HandleSight();
         HandleHearing();
         switch (currentState)
@@ -139,6 +151,11 @@ public class BabyBoarLogic : MonoBehaviour
             if (hit.collider.CompareTag("Player"))
             {
                 seesPlayer = true;
+                if (!playedInvestigateSound)
+                {
+                    SoundFXManager.instance.PlaySoundFXClip(boarHearsYou, transform.position, SOUND_EFFECT_VOLUME);
+                    StartCoroutine(InvestigateSoundCooldown(INVESTIGATE_SOUND_COOLDOWN));
+                }
                 if (playerVisibleTimer < requiredSightTime)
                 {
                     playerVisibleTimer += Time.deltaTime;
@@ -149,17 +166,19 @@ public class BabyBoarLogic : MonoBehaviour
                     lastRecognizedPlayerLocation = playerObject.transform.position;
                     currentState = BabyBoarState.Running;
                 }
-
-                // else if (currentState != BoarState.Chasing)
-                // {
-                //     currentState = BoarState.Investigating;
-                // }
-
                 return;
             }
         }
-        // if the raycast didn't rigger, the player is not visible
+        // if the raycast didn't trigger, the player is not visible
         seesPlayer = false;
+        playedInvestigateSound = false;
+    }
+
+
+    IEnumerator InvestigateSoundCooldown(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        playedInvestigateSound = false;
     }
 
 
@@ -168,7 +187,7 @@ public class BabyBoarLogic : MonoBehaviour
 
         CharacterController controller = playerObject.GetComponent<CharacterController>();
 
-        playerIsMoving = controller.velocity.magnitude > movementHearingThreshold;
+        playerIsMoving = controller.velocity.magnitude > movementThreshold;
 
         playerMadeNoise = !playerObject.isCrouching && playerIsMoving;
 
@@ -179,6 +198,7 @@ public class BabyBoarLogic : MonoBehaviour
         if (heardPlayer && !isInvestigating)
         {
             // start coroutine, look at player for 2-3 seconds.
+            
             StartCoroutine(Investigate());
         }
     }
@@ -188,8 +208,14 @@ public class BabyBoarLogic : MonoBehaviour
         agent.isStopped = true;
 
         float timer = 0f;
-        float duration = 3f;
+        float duration = 2f;
 
+        if (!playedInvestigateSound)
+        {
+            playedInvestigateSound = true;
+            SoundFXManager.instance.PlaySoundFXClip(boarHearsYou, transform.position, SOUND_EFFECT_VOLUME);
+            StartCoroutine(InvestigateSoundCooldown(INVESTIGATE_SOUND_COOLDOWN));
+        }
         while (timer < duration)
         {
             timer += Time.deltaTime;
@@ -204,6 +230,7 @@ public class BabyBoarLogic : MonoBehaviour
 
             yield return null;
         }
+        playedInvestigateSound = false;
         agent.isStopped = false;
         isInvestigating = false;
     }
@@ -248,6 +275,7 @@ public class BabyBoarLogic : MonoBehaviour
 
     IEnumerator RunAway()
     {
+        
         isRunning = true;
         Vector3 relativePos = playerObject.transform.position - transform.position;
         // transform.rotation = Quaternion.LookRotation(relativePos, new Vector3(0, 1, 0));
@@ -258,12 +286,12 @@ public class BabyBoarLogic : MonoBehaviour
         // run away coroutine, including destroying object
         agent.speed *= runningMultiplier;
         agent.SetDestination(runningFinalLocation);
+        SoundFXManager.instance.PlaySoundFXClip(boarRunsAway, transform.position, SOUND_EFFECT_VOLUME);
         while (Vector3.Distance(transform.position, runningFinalLocation) > reachThreshold)
         {
             yield return null;
         }
 
-        // hide the object
         currentState = BabyBoarState.Patrolling;
         indexMovingTowards = 0;
         
@@ -282,6 +310,7 @@ public class BabyBoarLogic : MonoBehaviour
 
     IEnumerator Mourn()
     {
+        SoundFXManager.instance.PlaySoundFXClip(boarMourns, transform.position, SOUND_EFFECT_VOLUME);
         isMourning = true;
         yield return new WaitForSeconds(5f);
         currentState = BabyBoarState.Patrolling;
