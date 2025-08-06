@@ -89,6 +89,8 @@ public class BoarLogic : MonoBehaviour
     [SerializeField] private AudioClip boarChaseStart;
     private bool playedNoticedPlayerSound = false;
 
+    [SerializeField] public const float NOTICED_PLAYER_SOUND_COOLDOWN = 5f;
+
 
     void Start()
     {
@@ -174,7 +176,7 @@ public class BoarLogic : MonoBehaviour
                 }
                 if (!playedNoticedPlayerSound)
                 {
-                    playedNoticedPlayerSound = true;
+                    StartCoroutine(NoticedPlayerSoundCooldown(NOTICED_PLAYER_SOUND_COOLDOWN));
                     SoundFXManager.instance.PlaySoundFXClip(boarNoticesYou, transform.position, SOUND_EFFECT_VOLUME);
                 }
                 seesPlayer = true;
@@ -199,6 +201,12 @@ public class BoarLogic : MonoBehaviour
         }
         // if the raycast didn't trigger, the player is not visible
         seesPlayer = false;
+    }
+
+        IEnumerator NoticedPlayerSoundCooldown(float seconds)
+    {
+        playedNoticedPlayerSound = true;
+        yield return new WaitForSeconds(seconds);
         playedNoticedPlayerSound = false;
     }
 
@@ -291,11 +299,6 @@ public class BoarLogic : MonoBehaviour
 
     IEnumerator WaitAndReturnToPatrol(float waitTime)
     {
-        if (!playedNoticedPlayerSound)
-        {
-            playedNoticedPlayerSound = true;
-            SoundFXManager.instance.PlaySoundFXClip(boarNoticesYou, transform.position, SOUND_EFFECT_VOLUME);
-        }
         Quaternion leftRotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y - 90f, 0));
         Quaternion rightRotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y + 90f, 0));
 
