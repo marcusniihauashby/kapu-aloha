@@ -15,6 +15,7 @@ MonoBehaviour:
   isConversation: 0
   speakerName:
   - You
+  - You
   paragraphs:
   - If I must return what I took like that old woman had said, then I need to...return
     their food!
