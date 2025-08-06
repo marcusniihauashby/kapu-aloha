@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using EasyPeasyFirstPersonController;
 public class DialogueController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI nameTextUI;
@@ -24,6 +25,8 @@ public class DialogueController : MonoBehaviour
 
     public const float IDLE_TIME_BETWEEN_DIALOGUE = 4f;
     private const float MAX_TYPE_TIME = 0.1f;
+
+
 
     public void DisplayNextParagraph(DialogueText dialogueText)
     {
@@ -92,8 +95,30 @@ public class DialogueController : MonoBehaviour
     {
         // stop player movement until this is over
         DisplayNextParagraph(dialogueText);
+        StartCoroutine(RunConversation(dialogueText));
         
-        
+    }
+
+    private IEnumerator RunConversation(DialogueText dialogueText)
+    {
+        playerObject.SetPlayerControl(false);
+        while (!conversationEnded)
+        {
+            yield return new WaitUntil(() => !isTyping);
+            yield return new WaitForSeconds(IDLE_TIME_BETWEEN_DIALOGUE);
+            DisplayNextParagraph(dialogueText);
+        }
+        // --- FIX STARTS HERE ---
+
+        // 1. Wait for the final paragraph to finish typing.
+        yield return new WaitUntil(() => !isTyping);
+
+        // 2. (Optional) Wait a moment so the player can read the last line.
+        yield return new WaitForSeconds(IDLE_TIME_BETWEEN_DIALOGUE);
+
+        // 3. Now, properly end the conversation and close the UI.
+        DisplayNextParagraph(dialogueText);
+        playerObject.SetPlayerControl(true);
     }
         public void HandleMonologue(DialogueText dialogueText)
     {

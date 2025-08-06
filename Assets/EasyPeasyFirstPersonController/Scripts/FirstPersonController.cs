@@ -300,5 +300,15 @@ namespace EasyPeasyFirstPersonController
             xVelocity += angle;  // optional: skip lerping for immediate effect
             transform.rotation = Quaternion.Euler(0f, xVelocity, 0f);
         }
+        public void SetPlayerControl(bool hasControl)
+        {
+            // Use the existing methods to enable/disable look and move
+            SetControl(hasControl);
+
+            // Also manage the cursor's lock state and visibility.
+            // When the player has no control (e.g., in a menu), we want to show the cursor.
+            // When they have control, we want to lock and hide it.
+            SetCursorVisibility(!hasControl);
+        }
     }
 }
