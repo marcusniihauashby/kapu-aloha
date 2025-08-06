@@ -71,8 +71,8 @@ namespace EasyPeasyFirstPersonController
         public float CurrentCameraHeight => isCrouching || isSliding ? crouchCameraHeight : originalCameraParentHeight;
 
         private AudioSource[] audioSources;
-        public const float WALKING_SOUND_VOLUME = 0.02f;
-        public const float SPRINTING_SOUND_VOLUME = 0.01f;
+        public const float WALKING_SOUND_VOLUME = 0.25f;
+        public const float SPRINTING_SOUND_VOLUME = 0.125f;
         public float movementThreshold;
         private void Awake()
         {

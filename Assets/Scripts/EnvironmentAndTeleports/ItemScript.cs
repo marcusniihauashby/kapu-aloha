@@ -54,7 +54,7 @@ public class ItemScript : MonoBehaviour
             {
                 isActive = !isActive;
                 meshRenderer.enabled = isActive;
-                SoundFXManager.instance.PlaySoundFXClip(audioClip, transform.position, 1f);
+                // SoundFXManager.instance.PlaySoundFXClip(audioClip, transform.position, 1f);
                 if (isFinalItem)
                 {
                     // teleport player to other location.

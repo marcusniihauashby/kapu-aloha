@@ -26,6 +26,10 @@ public class HouseEnterAndExitScript : MonoBehaviour
 
     public const float JUMPSCARE_VOLUME = 0.5f;
 
+    private bool playedJumpscareSound = false;
+
+    private bool handledConversation = false;
+
 
 
 
@@ -71,8 +75,16 @@ public class HouseEnterAndExitScript : MonoBehaviour
         if (isDuplicateHouse)
         {
             // TODO: Have pele move in front of player
-            SoundFXManager.instance.PlaySoundFXClip(jumpscareSound, transform.position, JUMPSCARE_VOLUME);
-            dialogueController.HandleConversation(dialogueText);
+            if (!playedJumpscareSound)
+            {
+                SoundFXManager.instance.PlaySoundFXClip(jumpscareSound, transform.position, JUMPSCARE_VOLUME);
+                playedJumpscareSound = true;
+            }
+            if (!handledConversation)
+            {
+                dialogueController.HandleConversation(dialogueText);
+                handledConversation = true;
+            }
             // if player's y rotation is ever between 140 and 220, houseDuplicate.SetActive(false);
             if (other.CompareTag("Player"))
             {

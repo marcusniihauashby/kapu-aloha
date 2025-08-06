@@ -194,7 +194,7 @@ public class BabyBoarLogic : MonoBehaviour
 
         bool heardPlayer = playerInHearingRange && playerMadeNoise;
 
-        if (heardPlayer && !isInvestigating)
+        if (heardPlayer && !isInvestigating && currentState != BabyBoarState.Running)
         {
             // start coroutine, look at player for 2-3 seconds.
             

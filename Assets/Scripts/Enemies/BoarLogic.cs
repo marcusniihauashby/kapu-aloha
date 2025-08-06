@@ -89,15 +89,6 @@ public class BoarLogic : MonoBehaviour
     [SerializeField] private AudioClip boarChaseStart;
     private bool playedNoticedPlayerSound = false;
 
-    /*
-
-    noise logic, all footsteps have a location in which they were made.
-    feed current location of player if player makes sound.
-
-    */
-
-    // Start is called before the first frame update
-
 
     void Start()
     {
@@ -108,6 +99,7 @@ public class BoarLogic : MonoBehaviour
         spawnPosition = transform.position;
         attackHitboxObject = GameObject.Find("AttackHitbox")
         .GetComponent<BoxCollider>();
+        boarWalk = GetComponent<AudioSource>();
 
 
     }
