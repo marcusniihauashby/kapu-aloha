@@ -20,6 +20,10 @@ public class HouseEnterAndExitScript : MonoBehaviour
     [SerializeField] private GameObject loopTwoDialogueTriggersContainer;
     [SerializeField] private GameObject loopTwoSoundTriggersContainer;
 
+    [SerializeField] private GameObject meshRendererToBlockPlayer;
+    [SerializeField] private GameObject fallenRockCluster;
+
+
 
 
     // Start is called before the first frame update
@@ -60,6 +64,9 @@ public class HouseEnterAndExitScript : MonoBehaviour
             if (other.CompareTag("Player"))
             {
                 houseDuplicate.SetActive(true);
+                fallenRockCluster.SetActive(true);
+                meshRendererToBlockPlayer.SetActive(true);
+                
                 gameObject.GetComponent<BoxCollider>().enabled = false;
             }
         }

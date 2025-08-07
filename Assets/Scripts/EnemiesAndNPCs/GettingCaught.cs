@@ -15,6 +15,7 @@ public class GettingCaught : MonoBehaviour
     [SerializeField] private Vector3 respawnPoint;
     [SerializeField] private Vector3 respawnRotation;
     [SerializeField] private Vector3 boarRespawnPoint;
+    [SerializeField] private Vector3 farAwayPoint;
     private bool isCaught = false;
 
     [SerializeField] private GameObject blackOverlay;
@@ -35,6 +36,7 @@ public class GettingCaught : MonoBehaviour
     {
         if (!isCaught && other.CompareTag("Player"))
         {
+            UnityEngine.Debug.Log("Entered Trigger");
             isCaught = true;
             // move boar (parent of this object) back to it's initial spawn location
             StartCoroutine(HandleCaught());
@@ -46,7 +48,9 @@ public class GettingCaught : MonoBehaviour
         // save player movement speed, so I can disable it and change it back
         float originalWalkSpeed = playerObject.walkSpeed;
         float originalSprintSpeed = playerObject.sprintSpeed;
-        transform.parent.position = boarRespawnPoint;
+
+        //move boar far away (some random far away point i picked so it doesnt make sound anymore)
+        transform.parent.position = farAwayPoint;
 
 
         // activate gameover screen.
@@ -104,6 +108,9 @@ public class GettingCaught : MonoBehaviour
             AudioSource source = ambienceManager.GetComponent<AudioSource>();
             source.volume = savedVolumes[i];
         }
+
+        // return boar to where it belongs
+        transform.parent.position = boarRespawnPoint;
     }
 }
 

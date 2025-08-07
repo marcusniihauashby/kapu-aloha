@@ -62,7 +62,7 @@ public class BoarLogic : MonoBehaviour
     private bool isMovingForwards = true;
 
     // HandleChase Variables
-    public BoxCollider attackHitboxObject;
+    private BoxCollider attackHitbox;
     private bool soundPlayed;
     private bool attackCoroutineStarted = false;
     private float attackHitboxSpawnDelay = 1.5f;
@@ -82,8 +82,8 @@ public class BoarLogic : MonoBehaviour
     }
 
     private BoarState currentState = BoarState.Patrolling;
-    public const float BOAR_WALK_VOLUME = 0.25f;
-    public const float SOUND_EFFECT_VOLUME = 0.5f;
+    public const float BOAR_WALK_VOLUME = 0.4f;
+    public const float SOUND_EFFECT_VOLUME = 0.75f;
     private AudioSource boarWalk;
     [SerializeField] private AudioClip boarNoticesYou;
     [SerializeField] private AudioClip boarChaseStart;
@@ -92,18 +92,18 @@ public class BoarLogic : MonoBehaviour
     [SerializeField] public const float NOTICED_PLAYER_SOUND_COOLDOWN = 5f;
 
 
-    void Start()
+    void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         playerObject = GameObject.Find("FirstPersonController")
         .GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
         lineOfSight = GetComponent<CapsuleCollider>();
         spawnPosition = transform.position;
-        attackHitboxObject = GameObject.Find("AttackHitbox")
-        .GetComponent<BoxCollider>();
-        Debug.Log("Trying... BoarWalk assigned: " + (boarWalk != null));
+        attackHitbox = transform.Find("AttackHitbox").GetComponent<BoxCollider>();
+        attackHitbox.enabled = false;
+        Debug.Log("Trying to enable boarWalk" + (boarWalk != null));
         boarWalk = GetComponent<AudioSource>();
-        Debug.Log("Tried. BoarWalk assigned: " + (boarWalk != null));
+        Debug.Log("Tried to enable boarWalk" + (boarWalk != null));
     }
 
     // Update is called once per frame
@@ -352,7 +352,7 @@ public class BoarLogic : MonoBehaviour
             playerVisibleTimer -= Time.deltaTime;
             if (playerVisibleTimer < 0f)
             {
-                attackHitboxObject.enabled = false;
+                attackHitbox.enabled = false;
                 currentState = BoarState.Investigating;
                 soundPlayed = false;
                 attackCoroutineStarted = false;
@@ -364,7 +364,7 @@ public class BoarLogic : MonoBehaviour
     IEnumerator ActivateAttackHitboxAfterDelay(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        attackHitboxObject.enabled = true;
+        attackHitbox.enabled = true;
     }
 
     private void OnDrawGizmosSelected()

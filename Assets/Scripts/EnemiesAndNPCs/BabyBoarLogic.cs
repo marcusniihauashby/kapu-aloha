@@ -129,7 +129,7 @@ public class BabyBoarLogic : MonoBehaviour
         Enters investigation on the last seen location?
         
         */
-        Debug.Log(playerVisibleTimer + "is playerVisibleTimer");
+        // Debug.Log(playerVisibleTimer + "is playerVisibleTimer");
 
         if (!playerInSightZone || playerIsHiding)
         {
