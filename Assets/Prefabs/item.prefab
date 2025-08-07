@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4dafd2cc6d01042638046e1dbc962ea2, type: 2}
+  - {fileID: 2100000, guid: c7a8e24b01cf73e4bad6eb3cb7d40acc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -127,6 +127,8 @@ MonoBehaviour:
   pickUpText: {fileID: 0}
   putDownText: {fileID: 0}
   audioClip: {fileID: 8300000, guid: 33df931a498ca4343b9fc8a02377845b, type: 3}
+  finalDialogueTrigger: {fileID: 0}
+  pele: {fileID: 0}
 --- !u!114 &7587210295599959987
 MonoBehaviour:
   m_ObjectHideFlags: 0
