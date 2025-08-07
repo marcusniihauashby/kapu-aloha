@@ -14,6 +14,12 @@ public class TeleporterScript : MonoBehaviour
 
     public GameObject babyBoarToReset;
     public GameObject boarToReset;
+
+    // reveal them one by one
+    [SerializeField] private GameObject[] triggersToEnable;
+
+    private int index = 0;
+
     void Start()
     {
 
@@ -74,6 +80,11 @@ public class TeleporterScript : MonoBehaviour
                 BoarLogic boarLogic = boarToReset.GetComponent<BoarLogic>();
                 boarLogic.indexMovingTowards = 0;
                 boarToReset.transform.position = boarLogic.spawnPosition;
+            }
+            if (triggersToEnable != null && index < triggersToEnable.Length)
+            {
+                triggersToEnable[index].SetActive(true);
+                index += 1;
             }
 
 

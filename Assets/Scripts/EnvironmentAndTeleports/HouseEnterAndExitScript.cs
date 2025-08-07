@@ -18,18 +18,7 @@ public class HouseEnterAndExitScript : MonoBehaviour
     private bool teleportersActivated;
 
     [SerializeField] private GameObject loopTwoDialogueTriggersContainer;
-
-    [SerializeField] private DialogueController dialogueController;
-    [SerializeField] private DialogueText dialogueText;
-
-    [SerializeField] private AudioClip jumpscareSound;
-
-    public const float JUMPSCARE_VOLUME = 0.5f;
-
-    private bool playedJumpscareSound = false;
-
-    private bool handledConversation = false;
-
+    [SerializeField] private GameObject loopTwoSoundTriggersContainer;
 
 
 
@@ -46,6 +35,7 @@ public class HouseEnterAndExitScript : MonoBehaviour
         if (isDuplicateHouse && other.CompareTag("Player"))
         {
             loopTwoDialogueTriggersContainer.SetActive(true);
+            loopTwoSoundTriggersContainer.SetActive(true);
             if (!teleportersActivated)
             {
                 foreach (GameObject teleporter in teleporters)
@@ -70,21 +60,11 @@ public class HouseEnterAndExitScript : MonoBehaviour
             if (other.CompareTag("Player"))
             {
                 houseDuplicate.SetActive(true);
+                gameObject.GetComponent<BoxCollider>().enabled = false;
             }
         }
         if (isDuplicateHouse)
         {
-            // TODO: Have pele move in front of player
-            if (!playedJumpscareSound)
-            {
-                SoundFXManager.instance.PlaySoundFXClip(jumpscareSound, transform.position, JUMPSCARE_VOLUME);
-                playedJumpscareSound = true;
-            }
-            if (!handledConversation)
-            {
-                dialogueController.HandleConversation(dialogueText);
-                handledConversation = true;
-            }
             // if player's y rotation is ever between 140 and 220, houseDuplicate.SetActive(false);
             if (other.CompareTag("Player"))
             {

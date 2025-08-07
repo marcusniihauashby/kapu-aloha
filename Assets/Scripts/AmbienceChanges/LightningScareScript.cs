@@ -10,8 +10,6 @@ public class LightningScareScript : MonoBehaviour
     private MeshRenderer meshRenderer;
     private AudioSource audioSource;
     [SerializeField] private GameObject dialogueTrigger;
-
-    [SerializeField] private AudioClip lightningSound;
     void Start()
     {
         meshRenderer = gameObject.GetComponent<MeshRenderer>();

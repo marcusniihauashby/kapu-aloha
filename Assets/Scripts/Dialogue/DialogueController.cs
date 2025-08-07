@@ -12,6 +12,7 @@ public class DialogueController : MonoBehaviour
 
     [SerializeField] private EasyPeasyFirstPersonController.FirstPersonController playerObject;
 
+
     private Queue<Tuple<String, String>> paragraphs = new Queue<Tuple<string, string>>();
 
     private bool conversationEnded;
@@ -26,6 +27,21 @@ public class DialogueController : MonoBehaviour
     public const float IDLE_TIME_BETWEEN_DIALOGUE = 4f;
     private const float MAX_TYPE_TIME = 0.1f;
 
+    private const float TYPE_VOLUME = 0.25f;
+
+    private AudioSource typingAudioManager;
+
+
+
+    private void Awake()
+    {
+        typingAudioManager = GetComponent<AudioSource>();
+    }
+
+    private void Update()
+    {
+        typingAudioManager.volume = (isTyping) ? TYPE_VOLUME : 0f;
+    }
 
 
     public void DisplayNextParagraph(DialogueText dialogueText)
