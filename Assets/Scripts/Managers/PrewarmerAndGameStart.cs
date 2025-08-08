@@ -57,9 +57,11 @@ public class UIPrewarmer : MonoBehaviour
         }
 
         // Ensure the alpha is exactly 1 at the end
-        canvasGroup.alpha = 0f;
 
         //badly coded functionality for other scripts that im too lazy to change.
+
+        canvasGroup.alpha = 0f;
         darkBackground.SetActive(false);
+        canvasGroup.alpha = 1f;
     }
 }

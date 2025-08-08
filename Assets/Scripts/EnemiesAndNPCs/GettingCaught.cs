@@ -23,12 +23,15 @@ public class GettingCaught : MonoBehaviour
     [SerializeField] private DialogueController dialogueController;
 
     [SerializeField] private GameObject[] ambienceManagers;
-    
 
+    private CanvasGroup canvasGroup;
     void Start()
     {
         playerObject = GameObject.Find("FirstPersonController")
         .GetComponent<EasyPeasyFirstPersonController.FirstPersonController>();
+        canvasGroup = blackOverlay.GetComponent<CanvasGroup>();
+        
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,6 +56,11 @@ public class GettingCaught : MonoBehaviour
 
 
         // activate gameover screen.
+        if (canvasGroup.alpha != 1)
+        {
+            canvasGroup.alpha = 1;
+        }
+        
         blackOverlay.SetActive(true);
 
         // turn off ambient sound
