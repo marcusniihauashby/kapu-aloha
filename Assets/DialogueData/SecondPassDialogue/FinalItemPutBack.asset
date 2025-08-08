@@ -15,7 +15,5 @@ MonoBehaviour:
   isConversation: 0
   speakerName:
   - You
-  - You
   paragraphs:
-  - Okay, that's the last one.
-  - I've realized my wrongs... but what now?
+  - 
