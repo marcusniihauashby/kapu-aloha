@@ -15,9 +15,5 @@ MonoBehaviour:
   isConversation: 0
   speakerName:
   - You
-  - You
-  - You
   paragraphs:
   - Where am I...?
-  - I was just on this path! I was just here a moment ago!
-  - What is going on here? What is happening to me?
