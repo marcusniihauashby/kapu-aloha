@@ -34,6 +34,7 @@ public class TeleporterScript : MonoBehaviour
         foreach (GameObject item in itemsToTrack) {
             if (!item.GetComponent<MeshRenderer>().enabled)
             {
+                isTeleporter = true;
                 return;
             }
         }

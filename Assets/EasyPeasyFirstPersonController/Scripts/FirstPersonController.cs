@@ -73,6 +73,7 @@ namespace EasyPeasyFirstPersonController
         private AudioSource[] audioSources;
         public const float WALKING_SOUND_VOLUME = 0.25f;
         public const float SPRINTING_SOUND_VOLUME = 0.125f;
+        private float sensitivityChangeAmount = 5f;
         public float movementThreshold;
         private void Awake()
         {
@@ -186,6 +187,13 @@ namespace EasyPeasyFirstPersonController
             cam.fieldOfView = currentFov;
 
             HandleMovement();
+            if (Input.GetKeyDown(KeyCode.Minus)) {
+                DecreaseSensitivity(sensitivityChangeAmount);
+            }
+            if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.Plus)) {
+                IncreaseSensitivity(sensitivityChangeAmount);
+
+            }
         }
 
         private void HandleHeadBob()
@@ -309,6 +317,21 @@ namespace EasyPeasyFirstPersonController
             // When the player has no control (e.g., in a menu), we want to show the cursor.
             // When they have control, we want to lock and hide it.
             SetCursorVisibility(!hasControl);
+        }
+
+        public void IncreaseSensitivity(float amount)
+        {
+            if (mouseSensitivity < 100)
+            {
+                mouseSensitivity += amount;            
+            }
+        }
+
+        public void DecreaseSensitivity(float amount)
+        {
+            if (mouseSensitivity > 0) {
+                mouseSensitivity -= amount;
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ public class DialogueController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI nameTextUI;
     [SerializeField] private TextMeshProUGUI dialogueTextUI;
-    [SerializeField] private float typeSpeed = 20f;
+    [SerializeField] private float typeSpeed = 5000f;
 
     [SerializeField] private EasyPeasyFirstPersonController.FirstPersonController playerObject;
 
@@ -24,7 +24,7 @@ public class DialogueController : MonoBehaviour
 
     private const string HTML_ALPHA = "<color=#00000000>";
 
-    public const float IDLE_TIME_BETWEEN_DIALOGUE = 4f;
+    public const float IDLE_TIME_BETWEEN_DIALOGUE = 3f;
     private const float MAX_TYPE_TIME = 0.1f;
 
     private const float TYPE_VOLUME = 0.25f;

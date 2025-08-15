@@ -20,6 +20,8 @@ public class ItemScript : MonoBehaviour
     [SerializeField] private GameObject finalDialogueTrigger;
     [SerializeField] private GameObject pele;
 
+    private bool wastaken = false;
+
     void Start()
     {
         playerObject = GameObject.Find("FirstPersonController")
@@ -50,6 +52,12 @@ public class ItemScript : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.E))
             {
+                if (!wastaken)
+                {
+                    // SHOW CANVAS OBJECT
+                    // coroutine that takes 
+                }
+                wastaken = true;
                 isActive = !isActive;
                 meshRenderer.enabled = isActive;
                 // SoundFXManager.instance.PlaySoundFXClip(audioClip, transform.position, 1f);
