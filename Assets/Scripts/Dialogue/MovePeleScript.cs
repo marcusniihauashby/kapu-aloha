@@ -42,6 +42,7 @@ public class MovePeleScript : MonoBehaviour
         Debug.Log("Starting Coroutine");
         Vector3 startLocation = pele.transform.position;
         Vector3 desiredLocation = endLocation;
+        playerObject.LookAtVector(desiredLocation, PELE_SPEED);
         float timeElapsed = 0f;
         while (timeElapsed < duration)
         {

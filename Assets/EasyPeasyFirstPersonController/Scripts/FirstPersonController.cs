@@ -2,7 +2,9 @@ namespace EasyPeasyFirstPersonController
 {
     using System;
     using System.Collections;
+    using UnityEditor;
     using UnityEngine;
+    using UnityEngine.Rendering.HighDefinition;
 
     public partial class FirstPersonController : MonoBehaviour
     {
@@ -75,6 +77,10 @@ namespace EasyPeasyFirstPersonController
         public const float SPRINTING_SOUND_VOLUME = 0.125f;
         private float sensitivityChangeAmount = 5f;
         public float movementThreshold;
+
+        // New variable to track if the camera is being controlled by a script.
+        private bool isAutoLooking = false;
+        
         private void Awake()
         {
             characterController = GetComponent<CharacterController>();
@@ -96,6 +102,7 @@ namespace EasyPeasyFirstPersonController
 
         private void Update()
         {
+            Debug.Log("X ROTATION: " + rotX + "Y ROTATION: " + rotY);
             if (!isSprinting)
             {
                 audioSources[0].volume = (characterController.velocity.magnitude > movementThreshold) ? WALKING_SOUND_VOLUME : 0f;
@@ -117,7 +124,7 @@ namespace EasyPeasyFirstPersonController
                 coyoteTimer -= Time.deltaTime;
             }
 
-            if (isLook)
+            if (isLook && !isAutoLooking)
             {
                 float mouseX = Input.GetAxis("Mouse X") * 10 * mouseSensitivity * Time.deltaTime;
                 float mouseY = Input.GetAxis("Mouse Y") * 10 * mouseSensitivity * Time.deltaTime;
@@ -308,14 +315,114 @@ namespace EasyPeasyFirstPersonController
             xVelocity += angle;  // optional: skip lerping for immediate effect
             transform.rotation = Quaternion.Euler(0f, xVelocity, 0f);
         }
+
+        public void LookAtVector(Vector3 targetPoint, float duration)
+        {
+            // Stop any other look coroutines that might be running to avoid conflicts.
+            StopCoroutine("LookAtRoutine");
+            StartCoroutine(LookAtRoutine(targetPoint, duration));
+        }
+
+        private IEnumerator LookAtRoutine(Vector3 targetPoint, float duration)
+        {
+            isAutoLooking = true; // Disable player mouse input
+
+            float startRotX = rotX;
+            float startRotY = rotY;
+
+            // Calculate the direction from the camera to the target point.
+            Vector3 direction = (targetPoint - playerCamera.position).normalized;
+
+            // Calculate the target horizontal angle (yaw) using Atan2.
+            // This gives the angle in radians, which we convert to degrees.
+            float targetRotX = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
+            // Calculate the target vertical angle (pitch) using Asin.
+            // We negate it because looking up corresponds to a negative rotY in your setup.
+            float targetRotY = -Mathf.Asin(direction.y) * Mathf.Rad2Deg;
+
+            float elapsedTime = 0f;
+            while (elapsedTime < duration)
+            {
+                // Calculate the interpolation factor.
+                float t = elapsedTime / duration;
+
+                // Interpolate the target values.
+                rotX = Mathf.LerpAngle(startRotX, targetRotX, t);
+                rotY = Mathf.LerpAngle(startRotY, targetRotY, t);
+
+                // ALSO interpolate the smoothed velocity values directly.
+                xVelocity = Mathf.LerpAngle(startRotX, targetRotX, t);
+                yVelocity = Mathf.LerpAngle(startRotY, targetRotY, t);
+                
+                // Manually apply the rotation to both the player body and the camera every frame.
+                // This forces the visual update to happen inside the coroutine's loop.
+                transform.rotation = Quaternion.Euler(0f, xVelocity, 0f);
+                playerCamera.transform.localRotation = Quaternion.Euler(yVelocity, 0f, 0f);
+
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame before continuing the loop
+            }
+
+            // After the duration, snap to the final target rotation to ensure accuracy.
+            rotX = targetRotX;
+            rotY = targetRotY;
+            xVelocity = targetRotX;
+            yVelocity = targetRotY;
+
+            isAutoLooking = false; // Re-enable player mouse input
+        }
+
+        /// <summary>
+        /// Coroutine that handles the smooth camera rotation over time.
+        /// </summary>
+        // private IEnumerator LookAtRoutine(Vector3 targetPoint, float duration)
+        // {
+        //     isAutoLooking = true; // Disable player mouse input
+
+        //     float startRotX = rotX;
+        //     float startRotY = rotY;
+
+        //     // Calculate the direction from the camera to the target point.
+        //     Vector3 direction = (targetPoint - playerCamera.position).normalized;
+
+        //     // Calculate the target horizontal angle (yaw) using Atan2.
+        //     // This gives the angle in radians, which we convert to degrees.
+        //     float targetRotX = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
+        //     // Calculate the target vertical angle (pitch) using Asin.
+        //     // We negate it because looking up corresponds to a negative rotY in your setup.
+        //     float targetRotY = 0f;
+
+        //     float elapsedTime = 0f;
+        //     while (elapsedTime < duration)
+        //     {
+        //         // Use LerpAngle to smoothly interpolate between the start and target angles.
+        //         // LerpAngle correctly handles wrapping around 360 degrees (e.g., from 350 to 10).
+        //         rotX = Mathf.LerpAngle(startRotX, targetRotX, elapsedTime / duration);
+        //         rotY = Mathf.LerpAngle(startRotY, targetRotY, elapsedTime / duration);
+        //         xVelocity = Mathf.LerpAngle(startRotX, targetRotX, elapsedTime / duration);
+        //         yVelocity = Mathf.LerpAngle(startRotY, targetRotY, elapsedTime / duration);
+        //         // it does not work unless i add this line below. 
+        //         transform.rotation = Quaternion.Euler(0f, xVelocity, 0f);
+        //         // now i need to lerp y rotation to 0
+
+        //         elapsedTime += Time.deltaTime;
+        //         yield return null; // Wait for the next frame before continuing the loop
+        //     }
+
+            // After the duration, snap to the final target rotation to ensure accuracy.
+        //     rotX = targetRotX;
+        //     rotY = targetRotY;
+
+        //     isAutoLooking = false; // Re-enable player mouse input
+        // }
+
         public void SetPlayerControl(bool hasControl)
         {
-            // Use the existing methods to enable/disable look and move
             SetControl(hasControl);
 
-            // Also manage the cursor's lock state and visibility.
-            // When the player has no control (e.g., in a menu), we want to show the cursor.
-            // When they have control, we want to lock and hide it.
             SetCursorVisibility(!hasControl);
         }
 

@@ -24,7 +24,7 @@ public class DialogueController : MonoBehaviour
 
     private const string HTML_ALPHA = "<color=#00000000>";
 
-    public const float IDLE_TIME_BETWEEN_DIALOGUE = 3f;
+    public const float IDLE_TIME_BETWEEN_DIALOGUE = 2.5f;
     private const float MAX_TYPE_TIME = 0.1f;
 
     private const float TYPE_VOLUME = 0.25f;
