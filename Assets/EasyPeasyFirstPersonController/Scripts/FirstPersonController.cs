@@ -102,7 +102,6 @@ namespace EasyPeasyFirstPersonController
 
         private void Update()
         {
-            Debug.Log("X ROTATION: " + rotX + "Y ROTATION: " + rotY);
             if (!isSprinting)
             {
                 audioSources[0].volume = (characterController.velocity.magnitude > movementThreshold) ? WALKING_SOUND_VOLUME : 0f;
@@ -358,7 +357,8 @@ namespace EasyPeasyFirstPersonController
                 // Manually apply the rotation to both the player body and the camera every frame.
                 // This forces the visual update to happen inside the coroutine's loop.
                 transform.rotation = Quaternion.Euler(0f, xVelocity, 0f);
-                playerCamera.transform.localRotation = Quaternion.Euler(yVelocity, 0f, 0f);
+                // playerCamera.transform.localRotation = Quaternion.Euler(yVelocity, 0f, 0f); // original line if this is truly the case. but we only use the case where y = 0.
+                playerCamera.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
 
 
                 elapsedTime += Time.deltaTime;

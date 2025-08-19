@@ -101,19 +101,19 @@ public class BoarLogic : MonoBehaviour
         spawnPosition = transform.position;
         attackHitbox = transform.Find("AttackHitbox").GetComponent<BoxCollider>();
         attackHitbox.enabled = false;
-        Debug.Log("Trying to enable boarWalk" + (boarWalk != null));
+        // Debug.Log("Trying to enable boarWalk" + (boarWalk != null));
         boarWalk = GetComponent<AudioSource>();
-        Debug.Log("Tried to enable boarWalk" + (boarWalk != null));
+        // Debug.Log("Tried to enable boarWalk" + (boarWalk != null));
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log("Boar Update running. State: " + currentState);
+        Debug.Log("Boar Update running. State: " + currentState);
         // Debug.Log("IndexMovingTowards: " + indexMovingTowards + ", Positions.Length - 1: " + (positions.Length - 1));
 
         // update playerIsHiding
-        Debug.Log("" + (boarWalk == null) + ":" +  BOAR_WALK_VOLUME + ":" +  agent.velocity.magnitude + ":" + movementThreshold);
+        // Debug.Log("" + (boarWalk == null) + ":" +  BOAR_WALK_VOLUME + ":" +  agent.velocity.magnitude + ":" + movementThreshold);
         playerIsHiding = playerObject.playerIsHiding;
         boarWalk.volume = (agent.velocity.magnitude > movementThreshold) ? BOAR_WALK_VOLUME : 0f;
         HandleSight();
@@ -288,7 +288,8 @@ public class BoarLogic : MonoBehaviour
         // path towards lastRecognizedPlayerLocation, look left and right
         // TODO: Investigate sound trigger
         agent.SetDestination(lastRecognizedPlayerLocation);
-        if (Vector3.Distance(transform.position, lastRecognizedPlayerLocation) < reachThreshold)
+        // magic number below because idgaf, it's because the boar cannot reach areas not in it's navmesh.
+        if (Vector3.Distance(transform.position, lastRecognizedPlayerLocation) < reachThreshold + 3)
         {
             // if this triggers, we're at location and we look left and right. if we see someone, we break
             if (!isWaitingToReturn)
