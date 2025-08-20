@@ -15,9 +15,11 @@ public class TeleportOutOfForestScript : MonoBehaviour
 
     [SerializeField] private GameObject blackOverlay;
 
-    [SerializeField] private TMP_Text creditsText;
+    [SerializeField] private TMP_Text creditsText1;
+    [SerializeField] private TMP_Text creditsText2;
+    [SerializeField] private TMP_Text creditsText3;
 
-    [SerializeField] private float fadeDuration = 2f; // How long to fade in
+    [SerializeField] private float fadeDuration = 1f; // How long to fade in
 
 
     public void OnTriggerEnter(Collider other)
@@ -35,32 +37,60 @@ public class TeleportOutOfForestScript : MonoBehaviour
         playerObject.transform.position = finalDestination;
         SoundFXManager.instance.PlaySoundFXClip(audioClip, finalDestination, 1f);
 
-        yield return new WaitForSeconds(12.5f);
+        yield return new WaitForSeconds(7.5f);
         // TODO: Display End Credits.
 
-        blackOverlay.SetActive(true);
+        // fade alpha of black overlay to one
+        yield return StartCoroutine(FadeAlphaIn(blackOverlay.GetComponent<CanvasGroup>(), fadeDuration));
+
+
+
+        yield return StartCoroutine(FadeAlphaIn(creditsText1.GetComponent<CanvasGroup>(), fadeDuration));
+
+        yield return new WaitForSeconds(9f);
+
+        yield return StartCoroutine(FadeAlphaOut(creditsText1.GetComponent<CanvasGroup>(), fadeDuration));
+
         yield return new WaitForSeconds(1f);
-        creditsText.gameObject.SetActive(true);
-        // Reset alpha to 0 before fading
-        Color textColor = creditsText.color;
-        textColor.a = 0;
-        creditsText.color = textColor;
 
-        yield return StartCoroutine(FadeInText());
 
+        yield return StartCoroutine(FadeAlphaIn(creditsText2.GetComponent<CanvasGroup>(), fadeDuration));
+
+        yield return new WaitForSeconds(9f);
+
+        yield return StartCoroutine(FadeAlphaOut(creditsText2.GetComponent<CanvasGroup>(), fadeDuration));
+
+        yield return new WaitForSeconds(1f);
+
+
+        yield return StartCoroutine(FadeAlphaIn(creditsText3.GetComponent<CanvasGroup>(), fadeDuration));
+
+        yield return new WaitForSeconds(9f);
+
+        yield return StartCoroutine(FadeAlphaOut(creditsText3.GetComponent<CanvasGroup>(), fadeDuration));
+
+        yield return new WaitForSeconds(1f);
     }
-        IEnumerator FadeInText()
-    {
-        float elapsedTime = 0f;
-        Color c = creditsText.color;
 
-        while (elapsedTime < fadeDuration)
+    IEnumerator FadeAlphaIn(CanvasGroup canvasGroup, float duration)
+    {
+        float timeElapsed = 0f;
+        while (timeElapsed < duration)
         {
-            elapsedTime += Time.deltaTime;
-            c.a = Mathf.Clamp01(elapsedTime / fadeDuration);
-            creditsText.color = c;
+            canvasGroup.alpha = Mathf.Lerp(0f, 1f, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
             yield return null;
         }
+        canvasGroup.alpha = 1f;
     }
 
+    IEnumerator FadeAlphaOut(CanvasGroup canvasGroup, float duration) {
+        float timeElapsed = 0f;
+        while (timeElapsed < duration) {
+            canvasGroup.alpha = Mathf.Lerp(1f, 0f, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        canvasGroup.alpha = 0f;
+    }
 }

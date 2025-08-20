@@ -45,7 +45,7 @@ public class HouseEnterAndExitScript : MonoBehaviour
                 foreach (GameObject teleporter in teleporters)
                 {
                     TeleporterScript teleporterScript = teleporter.GetComponent<TeleporterScript>();
-                    teleporterScript.isTeleporter = true;
+                    teleporterScript.teleporterActivated = true;
                 }
                 teleportersActivated = true;
 

@@ -338,7 +338,8 @@ namespace EasyPeasyFirstPersonController
 
             // Calculate the target vertical angle (pitch) using Asin.
             // We negate it because looking up corresponds to a negative rotY in your setup.
-            float targetRotY = -Mathf.Asin(direction.y) * Mathf.Rad2Deg;
+            float targetRotY = -Mathf.Asin(direction.y) * Mathf.Rad2Deg;// original line if this is truly the case. but we only use the case where y = 0.
+            targetRotY = 0f;
 
             float elapsedTime = 0f;
             while (elapsedTime < duration)
@@ -357,8 +358,7 @@ namespace EasyPeasyFirstPersonController
                 // Manually apply the rotation to both the player body and the camera every frame.
                 // This forces the visual update to happen inside the coroutine's loop.
                 transform.rotation = Quaternion.Euler(0f, xVelocity, 0f);
-                // playerCamera.transform.localRotation = Quaternion.Euler(yVelocity, 0f, 0f); // original line if this is truly the case. but we only use the case where y = 0.
-                playerCamera.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                playerCamera.transform.localRotation = Quaternion.Euler(yVelocity, 0f, 0f);
 
 
                 elapsedTime += Time.deltaTime;

@@ -39,7 +39,6 @@ public class MovePeleScript : MonoBehaviour
 
     IEnumerator MovePele(float duration)
     {
-        Debug.Log("Starting Coroutine");
         Vector3 startLocation = pele.transform.position;
         Vector3 desiredLocation = endLocation;
         playerObject.LookAtVector(desiredLocation, PELE_SPEED);
@@ -48,13 +47,11 @@ public class MovePeleScript : MonoBehaviour
         {
             // lerp all values from currentposition to desired position.
             float t = Mathf.Clamp01(timeElapsed / duration);
-            Debug.Log("Pele Position" + pele.transform.position);
             pele.transform.position = Vector3.Lerp(startLocation, desiredLocation, t);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
         pele.transform.position = desiredLocation;
-        Debug.Log("Finished Coroutine");
 
         
     }

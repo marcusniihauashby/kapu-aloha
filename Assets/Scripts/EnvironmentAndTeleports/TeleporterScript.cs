@@ -8,6 +8,9 @@ public class TeleporterScript : MonoBehaviour
     // Start is called before the first frame update
 
     public bool isTeleporter;
+    public bool teleporterActivated;
+
+    private bool allItemsPutBack;
     public GameObject otherTeleporter;
 
     public GameObject[] itemsToTrack;
@@ -28,24 +31,40 @@ public class TeleporterScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if the items in itemsToTrack are all set to active, turn off isTeleporter.
-        // is this fine to check this if we're only having 3 items in itemsToTrack?
+        // if this not a teleporter, return.
         if (!isTeleporter) return;
-        foreach (GameObject item in itemsToTrack) {
+
+        // if this teleporter has not been activated, return.
+        if (!teleporterActivated) return;
+
+        // if this teleporter is activated, and this is a teleporter, then check items.
+        foreach (GameObject item in itemsToTrack)
+        {
             if (!item.GetComponent<MeshRenderer>().enabled)
             {
-                isTeleporter = true;
+                // if there is an item that is still missing, then execute line below.
+                allItemsPutBack = false;
                 return;
             }
         }
-        isTeleporter = false;
+        // if not, then all items have been put back.
+        allItemsPutBack = true;
     }
 
 
     void OnTriggerEnter(Collider other)
     {
+        // if this is not a teleporter, then return.
         if (!isTeleporter) return;
 
+        // if this teleporter was not activated, then return.
+        if (!teleporterActivated) return;
+
+        // if this teleporter has all items put back, then return.
+        if (allItemsPutBack) return;
+
+
+        // if items are not put back, then teleport player.
         if (other.CompareTag("Player"))
         {
             // Get the root player object
@@ -87,7 +106,6 @@ public class TeleporterScript : MonoBehaviour
                 triggersToEnable[index].SetActive(true);
                 index += 1;
             }
-
 
         }
     //     else if (other.CompareTag("Boar"))
