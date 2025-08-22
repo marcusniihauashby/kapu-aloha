@@ -80,7 +80,7 @@ namespace EasyPeasyFirstPersonController
 
         // New variable to track if the camera is being controlled by a script.
         private bool isAutoLooking = false;
-        
+
         private void Awake()
         {
             characterController = GetComponent<CharacterController>();
@@ -139,11 +139,12 @@ namespace EasyPeasyFirstPersonController
                 currentTiltAngle = Mathf.SmoothDamp(currentTiltAngle, targetTiltAngle, ref tiltVelocity, 0.2f);
                 playerCamera.transform.localRotation = Quaternion.Euler(yVelocity - currentTiltAngle, 0f, 0f);
                 transform.rotation = Quaternion.Euler(0f, xVelocity, 0f);
+
+
             }
 
             HandleHeadBob();
-
-            bool wantsToCrouch = canCrouch && Input.GetKey(KeyCode.LeftControl) && !isSliding;
+            bool wantsToCrouch = canCrouch && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.JoystickButton2)) && !isSliding;
             Vector3 point1 = transform.position + characterController.center - Vector3.up * (characterController.height * 0.5f);
             Vector3 point2 = point1 + Vector3.up * characterController.height * 0.6f;
             float capsuleRadius = characterController.radius * 0.95f;
@@ -163,7 +164,7 @@ namespace EasyPeasyFirstPersonController
                 isCrouching = canCrouch && (wantsToCrouch || (hasCeiling && !isSliding));
             }
 
-            if (canSlide && isSprinting && Input.GetKeyDown(KeyCode.LeftControl) && isGrounded)
+            if (canSlide && isSprinting && Input.GetKeyDown("Fire1") && isGrounded)
             {
                 isSliding = true;
                 slideTimer = slideDuration;
@@ -193,10 +194,12 @@ namespace EasyPeasyFirstPersonController
             cam.fieldOfView = currentFov;
 
             HandleMovement();
-            if (Input.GetKeyDown(KeyCode.Minus)) {
+            if (Input.GetKeyDown(KeyCode.Minus))
+            {
                 DecreaseSensitivity(sensitivityChangeAmount);
             }
-            if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.Plus)) {
+            if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.Plus))
+            {
                 IncreaseSensitivity(sensitivityChangeAmount);
 
             }
@@ -255,7 +258,7 @@ namespace EasyPeasyFirstPersonController
         {
             moveInput.x = Input.GetAxis("Horizontal");
             moveInput.y = Input.GetAxis("Vertical");
-            isSprinting = canSprint && Input.GetKey(KeyCode.LeftShift) && moveInput.y > 0.1f && isGrounded && !isCrouching && !isSliding;
+            isSprinting = canSprint && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.JoystickButton14)) && moveInput.y > 0.1f && isGrounded && !isCrouching && !isSliding;
 
             float currentSpeed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : walkSpeed);
             if (!isMove) currentSpeed = 0f;
@@ -266,7 +269,7 @@ namespace EasyPeasyFirstPersonController
 
             if (isGrounded || coyoteTimer > 0f)
             {
-                if (canJump && Input.GetKeyDown(KeyCode.Space) && !isSliding)
+                if (canJump && Input.GetButtonDown("Jump") && !isSliding)
                 {
                     moveDirection.y = jumpSpeed;
                 }
@@ -354,7 +357,7 @@ namespace EasyPeasyFirstPersonController
                 // ALSO interpolate the smoothed velocity values directly.
                 xVelocity = Mathf.LerpAngle(startRotX, targetRotX, t);
                 yVelocity = Mathf.LerpAngle(startRotY, targetRotY, t);
-                
+
                 // Manually apply the rotation to both the player body and the camera every frame.
                 // This forces the visual update to happen inside the coroutine's loop.
                 transform.rotation = Quaternion.Euler(0f, xVelocity, 0f);
@@ -412,7 +415,7 @@ namespace EasyPeasyFirstPersonController
         //         yield return null; // Wait for the next frame before continuing the loop
         //     }
 
-            // After the duration, snap to the final target rotation to ensure accuracy.
+        // After the duration, snap to the final target rotation to ensure accuracy.
         //     rotX = targetRotX;
         //     rotY = targetRotY;
 
@@ -430,13 +433,14 @@ namespace EasyPeasyFirstPersonController
         {
             if (mouseSensitivity < 100)
             {
-                mouseSensitivity += amount;            
+                mouseSensitivity += amount;
             }
         }
 
         public void DecreaseSensitivity(float amount)
         {
-            if (mouseSensitivity > 0) {
+            if (mouseSensitivity > 0)
+            {
                 mouseSensitivity -= amount;
             }
         }

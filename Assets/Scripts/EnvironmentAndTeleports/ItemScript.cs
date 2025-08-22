@@ -50,7 +50,7 @@ public class ItemScript : MonoBehaviour
                 putDownText.SetActive(true);
 
             }
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetButtonDown("Action"))
             {
                 if (!wastaken)
                 {
