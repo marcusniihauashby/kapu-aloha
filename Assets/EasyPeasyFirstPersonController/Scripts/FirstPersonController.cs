@@ -144,7 +144,14 @@ namespace EasyPeasyFirstPersonController
             }
 
             HandleHeadBob();
-            bool wantsToCrouch = canCrouch && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.JoystickButton2)) && !isSliding;
+
+            // MAC CONTROL SCHEME
+            // bool wantsToCrouch = canCrouch && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.JoystickButton2)) && !isSliding;
+
+            // WINDOWS CONTROL SCHEME
+            bool wantsToCrouch = canCrouch && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.JoystickButton1)) && !isSliding;
+
+
             Vector3 point1 = transform.position + characterController.center - Vector3.up * (characterController.height * 0.5f);
             Vector3 point2 = point1 + Vector3.up * characterController.height * 0.6f;
             float capsuleRadius = characterController.radius * 0.95f;
@@ -258,7 +265,12 @@ namespace EasyPeasyFirstPersonController
         {
             moveInput.x = Input.GetAxis("Horizontal");
             moveInput.y = Input.GetAxis("Vertical");
-            isSprinting = canSprint && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.JoystickButton14)) && moveInput.y > 0.1f && isGrounded && !isCrouching && !isSliding;
+            // MAC CONTROL SCHEME
+            // isSprinting = canSprint && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.JoystickButton14)) && moveInput.y > 0.1f && isGrounded && !isCrouching && !isSliding;
+
+            // WINDOWS CONTROL SCHEME
+            isSprinting = canSprint && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.JoystickButton8)) && moveInput.y > 0.1f && isGrounded && !isCrouching && !isSliding;
+
 
             float currentSpeed = isCrouching ? crouchSpeed : (isSprinting ? sprintSpeed : walkSpeed);
             if (!isMove) currentSpeed = 0f;
