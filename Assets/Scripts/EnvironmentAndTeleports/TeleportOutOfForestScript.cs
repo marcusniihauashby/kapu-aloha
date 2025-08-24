@@ -41,6 +41,7 @@ public class TeleportOutOfForestScript : MonoBehaviour
         // TODO: Display End Credits.
 
         // fade alpha of black overlay to one
+        blackOverlay.SetActive(true);
         yield return StartCoroutine(FadeAlphaIn(blackOverlay.GetComponent<CanvasGroup>(), fadeDuration));
 
 
