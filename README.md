@@ -45,6 +45,8 @@ Additionally, I created a script that always tracked the player camera's orienta
 Crucially, but albeit not as glamorous, I made some basic by-hand calculations that helped me balance occluding the player's vision during the transition with maintaining a natural forest 
 feel, making the teleportation truly invisible from any angle.
 
+This feature was particularly liked by the caseload managers at Gameheads, leading to our nomination for Best Programming at the end of the summer.
+
 
 ### Challenge 2 (Collaboration tools with non-coding teammates):
 
@@ -57,3 +59,5 @@ and drag-and-drop it into trigger zones within Unity. This eliminated the need f
 
 Sound Manager: For sound, I built a robust sound manager that supports global, proximal (coordinate-offset), and static sounds. I provided simple functions with documented boilerplate at key trigger points 
 (e.g., "Death Sound," "Jumpscare Sound"), allowing our sound designer to simply drag-and-drop their edited audio files into the relevant slots, significantly expediting their workflow.
+
+These tools empowered our narrative designer to make much more contributions than she would have been able to do normally, which lead to our nomination for Best Narrative Design at the end of the summer.
