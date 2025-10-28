@@ -3,6 +3,8 @@
 
 [Link to the Game](https://marcusna.itch.io/kapu-aloha)
 
+![Game Gif](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2UxODFuNnlwOXViNmUybjV6dmF1dTU1cXE3cnN2cXFidXQ1ZjI5dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/FlFIKdNgLvRNvHhGX5/giphy.gif)
+
 The image below is a hyperlink to a 3-minute demo video, check it out if you would like.
 
 [![Kapu Aloha Thumbnail](http://img.youtube.com/vi/2AfgTELR-6o/0.jpg)](http://www.youtube.com/watch?v=2AfgTELR-6o "Video Title")
