@@ -47,7 +47,7 @@ public class TimeManager : MonoBehaviour
     private void OnMinutesChange(int value)
     {
         globalLight.transform.Rotate(Vector3.up, (1f / (1440f / 4f)) * 360f, Space.World);
-        if (value >= 60)
+        if (value >= 1)
         {
             Hours++;
             minutes = 0;
